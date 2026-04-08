@@ -1,0 +1,118 @@
+{% extends "layouts/main.njk" %}
+
+{% block beforeContent %}
+  <a href="/admin" class="govuk-back-link">Back to dashboard</a>
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+
+      <h1 class="govuk-heading-xl">Reports</h1>
+
+      {% if error %}
+        <div class="govuk-error-summary" data-module="govuk-error-summary">
+          <h2 class="govuk-error-summary__title">There is a problem</h2>
+          <div class="govuk-error-summary__body">
+            <p class="govuk-body">{{ error }}</p>
+          </div>
+        </div>
+      {% endif %}
+
+      <h2 class="govuk-heading-l">Summary statistics</h2>
+
+      <table class="govuk-table govuk-!-margin-bottom-9">
+        <caption class="govuk-table__caption govuk-table__caption--m">Overall application statistics</caption>
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">Metric</th>
+            <th scope="col" class="govuk-table__header govuk-table__header--numeric">Count</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">Total applications</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{{ summary.total or 0 }}</td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">Draft</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{{ summary.draft or 0 }}</td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">Submitted</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{{ summary.submitted or 0 }}</td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">Under review</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{{ summary.underReview or 0 }}</td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">Accepted</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{{ summary.accepted or 0 }}</td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">Rejected</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{{ summary.rejected or 0 }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2 class="govuk-heading-l">Applications by status</h2>
+
+      <table class="govuk-table govuk-!-margin-bottom-9">
+        <caption class="govuk-table__caption govuk-table__caption--m">Breakdown by current status</caption>
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">Status</th>
+            <th scope="col" class="govuk-table__header govuk-table__header--numeric">Count</th>
+            <th scope="col" class="govuk-table__header govuk-table__header--numeric">Percentage</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          {% if summary.byStatus %}
+            {% for item in summary.byStatus %}
+              <tr class="govuk-table__row">
+                <td class="govuk-table__cell">{{ item.status }}</td>
+                <td class="govuk-table__cell govuk-table__cell--numeric">{{ item.count }}</td>
+                <td class="govuk-table__cell govuk-table__cell--numeric">{{ item.percentage }}%</td>
+              </tr>
+            {% endfor %}
+          {% else %}
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell" colspan="3">No data available</td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+
+      <h2 class="govuk-heading-l">Applications by region</h2>
+
+      <table class="govuk-table">
+        <caption class="govuk-table__caption govuk-table__caption--m">Breakdown by region</caption>
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">Region</th>
+            <th scope="col" class="govuk-table__header govuk-table__header--numeric">Count</th>
+            <th scope="col" class="govuk-table__header govuk-table__header--numeric">Percentage</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          {% if summary.byRegion %}
+            {% for item in summary.byRegion %}
+              <tr class="govuk-table__row">
+                <td class="govuk-table__cell">{{ item.region }}</td>
+                <td class="govuk-table__cell govuk-table__cell--numeric">{{ item.count }}</td>
+                <td class="govuk-table__cell govuk-table__cell--numeric">{{ item.percentage }}%</td>
+              </tr>
+            {% endfor %}
+          {% else %}
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell" colspan="3">No data available</td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+{% endblock %}

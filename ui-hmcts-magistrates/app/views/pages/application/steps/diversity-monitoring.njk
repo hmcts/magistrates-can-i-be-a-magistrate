@@ -1,0 +1,136 @@
+{% extends "layouts/main.njk" %}
+
+{% set currentPage = "my-applications" %}
+
+{% block beforeContent %}
+  <a href="/application/{{ applicationId }}" class="govuk-back-link">Back to task list</a>
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      {% if errors and errors | length > 0 %}
+        <div class="govuk-error-summary" data-module="govuk-error-summary">
+          <div role="alert">
+            <h2 class="govuk-error-summary__title">There is a problem</h2>
+            <div class="govuk-error-summary__body">
+              <ul class="govuk-list govuk-error-summary__list">
+                {% for key, message in errors %}
+                  <li><a href="#{{ key }}">{{ message }}</a></li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
+      <h1 class="govuk-heading-xl">Diversity monitoring questions</h1>
+
+      <div class="govuk-inset-text">
+        These questions are optional and are used for monitoring purposes only. Your answers will not affect your application. The information is collected anonymously to help us ensure the magistracy reflects the diversity of the community it serves.
+      </div>
+
+      <form method="post" action="/application/{{ applicationId }}/diversity-monitoring" novalidate>
+
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-label--m" for="gender">What is your gender?</label>
+          <select class="govuk-select" id="gender" name="gender">
+            <option value="">Select an option</option>
+            <option value="Male"{% if formData.gender == "Male" %} selected{% endif %}>Male</option>
+            <option value="Female"{% if formData.gender == "Female" %} selected{% endif %}>Female</option>
+            <option value="Non-binary"{% if formData.gender == "Non-binary" %} selected{% endif %}>Non-binary</option>
+            <option value="Prefer not to say"{% if formData.gender == "Prefer not to say" %} selected{% endif %}>Prefer not to say</option>
+            <option value="Other"{% if formData.gender == "Other" %} selected{% endif %}>Other</option>
+          </select>
+        </div>
+
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-label--m" for="ethnicity">What is your ethnic group?</label>
+          <select class="govuk-select" id="ethnicity" name="ethnicity">
+            <option value="">Select an option</option>
+            <option value="" disabled>--- White ---</option>
+            <option value="White - English, Welsh, Scottish, Northern Irish or British"{% if formData.ethnicity == "White - English, Welsh, Scottish, Northern Irish or British" %} selected{% endif %}>English, Welsh, Scottish, Northern Irish or British</option>
+            <option value="White - Irish"{% if formData.ethnicity == "White - Irish" %} selected{% endif %}>Irish</option>
+            <option value="White - Gypsy or Irish Traveller"{% if formData.ethnicity == "White - Gypsy or Irish Traveller" %} selected{% endif %}>Gypsy or Irish Traveller</option>
+            <option value="White - Any other White background"{% if formData.ethnicity == "White - Any other White background" %} selected{% endif %}>Any other White background</option>
+            <option value="" disabled>--- Mixed or Multiple ethnic groups ---</option>
+            <option value="Mixed - White and Black Caribbean"{% if formData.ethnicity == "Mixed - White and Black Caribbean" %} selected{% endif %}>White and Black Caribbean</option>
+            <option value="Mixed - White and Black African"{% if formData.ethnicity == "Mixed - White and Black African" %} selected{% endif %}>White and Black African</option>
+            <option value="Mixed - White and Asian"{% if formData.ethnicity == "Mixed - White and Asian" %} selected{% endif %}>White and Asian</option>
+            <option value="Mixed - Any other Mixed or Multiple ethnic background"{% if formData.ethnicity == "Mixed - Any other Mixed or Multiple ethnic background" %} selected{% endif %}>Any other Mixed or Multiple ethnic background</option>
+            <option value="" disabled>--- Asian or Asian British ---</option>
+            <option value="Asian - Indian"{% if formData.ethnicity == "Asian - Indian" %} selected{% endif %}>Indian</option>
+            <option value="Asian - Pakistani"{% if formData.ethnicity == "Asian - Pakistani" %} selected{% endif %}>Pakistani</option>
+            <option value="Asian - Bangladeshi"{% if formData.ethnicity == "Asian - Bangladeshi" %} selected{% endif %}>Bangladeshi</option>
+            <option value="Asian - Chinese"{% if formData.ethnicity == "Asian - Chinese" %} selected{% endif %}>Chinese</option>
+            <option value="Asian - Any other Asian background"{% if formData.ethnicity == "Asian - Any other Asian background" %} selected{% endif %}>Any other Asian background</option>
+            <option value="" disabled>--- Black, African, Caribbean or Black British ---</option>
+            <option value="Black - African"{% if formData.ethnicity == "Black - African" %} selected{% endif %}>African</option>
+            <option value="Black - Caribbean"{% if formData.ethnicity == "Black - Caribbean" %} selected{% endif %}>Caribbean</option>
+            <option value="Black - Any other Black, African or Caribbean background"{% if formData.ethnicity == "Black - Any other Black, African or Caribbean background" %} selected{% endif %}>Any other Black, African or Caribbean background</option>
+            <option value="" disabled>--- Other ethnic group ---</option>
+            <option value="Other - Arab"{% if formData.ethnicity == "Other - Arab" %} selected{% endif %}>Arab</option>
+            <option value="Other - Any other ethnic group"{% if formData.ethnicity == "Other - Any other ethnic group" %} selected{% endif %}>Any other ethnic group</option>
+            <option value="Prefer not to say"{% if formData.ethnicity == "Prefer not to say" %} selected{% endif %}>Prefer not to say</option>
+          </select>
+        </div>
+
+        <div class="govuk-form-group">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+              Do you consider yourself to have a disability?
+            </legend>
+            <div class="govuk-radios" data-module="govuk-radios">
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="disability" name="disability" type="radio" value="yes"{% if formData.disability == "yes" %} checked{% endif %}>
+                <label class="govuk-label govuk-radios__label" for="disability">Yes</label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="disability-2" name="disability" type="radio" value="no"{% if formData.disability == "no" %} checked{% endif %}>
+                <label class="govuk-label govuk-radios__label" for="disability-2">No</label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="disability-3" name="disability" type="radio" value="prefer-not-to-say"{% if formData.disability == "prefer-not-to-say" %} checked{% endif %}>
+                <label class="govuk-label govuk-radios__label" for="disability-3">Prefer not to say</label>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-label--m" for="religion">What is your religion or belief?</label>
+          <select class="govuk-select" id="religion" name="religion">
+            <option value="">Select an option</option>
+            <option value="No religion"{% if formData.religion == "No religion" %} selected{% endif %}>No religion</option>
+            <option value="Christian"{% if formData.religion == "Christian" %} selected{% endif %}>Christian (including Church of England, Catholic, Protestant and all other Christian denominations)</option>
+            <option value="Buddhist"{% if formData.religion == "Buddhist" %} selected{% endif %}>Buddhist</option>
+            <option value="Hindu"{% if formData.religion == "Hindu" %} selected{% endif %}>Hindu</option>
+            <option value="Jewish"{% if formData.religion == "Jewish" %} selected{% endif %}>Jewish</option>
+            <option value="Muslim"{% if formData.religion == "Muslim" %} selected{% endif %}>Muslim</option>
+            <option value="Sikh"{% if formData.religion == "Sikh" %} selected{% endif %}>Sikh</option>
+            <option value="Other"{% if formData.religion == "Other" %} selected{% endif %}>Other</option>
+            <option value="Prefer not to say"{% if formData.religion == "Prefer not to say" %} selected{% endif %}>Prefer not to say</option>
+          </select>
+        </div>
+
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-label--m" for="sexualOrientation">What is your sexual orientation?</label>
+          <select class="govuk-select" id="sexualOrientation" name="sexualOrientation">
+            <option value="">Select an option</option>
+            <option value="Heterosexual"{% if formData.sexualOrientation == "Heterosexual" %} selected{% endif %}>Heterosexual or straight</option>
+            <option value="Gay or Lesbian"{% if formData.sexualOrientation == "Gay or Lesbian" %} selected{% endif %}>Gay or Lesbian</option>
+            <option value="Bisexual"{% if formData.sexualOrientation == "Bisexual" %} selected{% endif %}>Bisexual</option>
+            <option value="Other"{% if formData.sexualOrientation == "Other" %} selected{% endif %}>Other</option>
+            <option value="Prefer not to say"{% if formData.sexualOrientation == "Prefer not to say" %} selected{% endif %}>Prefer not to say</option>
+          </select>
+        </div>
+
+        <div class="govuk-button-group">
+          <button type="submit" class="govuk-button" data-module="govuk-button" name="action" value="save-and-continue">Save and continue</button>
+          <button type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button" name="action" value="save-and-return">Save and come back later</button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

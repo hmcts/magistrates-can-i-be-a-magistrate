@@ -1,0 +1,37 @@
+{% extends "layouts/main.njk" %}
+
+{% set currentPage = "my-applications" %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <div class="govuk-panel govuk-panel--confirmation">
+        <h1 class="govuk-panel__title">Application submitted</h1>
+        <div class="govuk-panel__body">
+          Your reference number<br><strong>{{ application.reference }}</strong>
+        </div>
+      </div>
+
+      <h2 class="govuk-heading-m">What happens next</h2>
+
+      <p class="govuk-body">We have sent a confirmation email to you.</p>
+
+      <p class="govuk-body">Your application will be reviewed by your local advisory committee. This usually takes 4 to 6 weeks.</p>
+
+      <p class="govuk-body">You may be contacted during this time to provide additional information or to arrange an interview.</p>
+
+      <h2 class="govuk-heading-m">What you can do next</h2>
+
+      <ul class="govuk-list govuk-list--bullet">
+        <li><a class="govuk-link" href="/application/my-applications">View your applications</a></li>
+        <li><a class="govuk-link" href="/vacancies">Search for more vacancies</a></li>
+      </ul>
+
+      <p class="govuk-body">
+        <a class="govuk-link" href="https://magistrates.judiciary.uk" target="_blank">Find out more about being a magistrate</a>
+      </p>
+
+    </div>
+  </div>
+{% endblock %}

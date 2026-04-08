@@ -1,0 +1,73 @@
+{% extends "layouts/main.njk" %}
+
+{% set currentPage = "vacancies" %}
+
+{% block beforeContent %}
+  <div class="govuk-breadcrumbs">
+    <ol class="govuk-breadcrumbs__list">
+      <li class="govuk-breadcrumbs__list-item">
+        <a class="govuk-breadcrumbs__link" href="/">Home</a>
+      </li>
+      <li class="govuk-breadcrumbs__list-item">
+        <a class="govuk-breadcrumbs__link" href="/vacancies">Vacancies</a>
+      </li>
+      <li class="govuk-breadcrumbs__list-item" aria-current="page">{{ vacancy.title }}</li>
+    </ol>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">{{ vacancy.title }}</h1>
+
+      <dl class="govuk-summary-list">
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Reference</dt>
+          <dd class="govuk-summary-list__value">{{ vacancy.reference }}</dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Region</dt>
+          <dd class="govuk-summary-list__value">{{ vacancy.region }}</dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Court type</dt>
+          <dd class="govuk-summary-list__value">{{ vacancy.courtType }}</dd>
+        </div>
+        {% if vacancy.advisoryCommittee %}
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Advisory committee</dt>
+            <dd class="govuk-summary-list__value">{{ vacancy.advisoryCommittee }}</dd>
+          </div>
+        {% endif %}
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Opens</dt>
+          <dd class="govuk-summary-list__value">{{ vacancy.opensAt }}</dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Closes</dt>
+          <dd class="govuk-summary-list__value">{{ vacancy.closesAt }}</dd>
+        </div>
+        {% if vacancy.status == "open" %}
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Status</dt>
+            <dd class="govuk-summary-list__value"><strong class="govuk-tag govuk-tag--green">Open</strong></dd>
+          </div>
+        {% endif %}
+      </dl>
+
+      {% if vacancy.description %}
+        <h2 class="govuk-heading-m">About this role</h2>
+        <p class="govuk-body">{{ vacancy.description }}</p>
+      {% endif %}
+
+      {% if vacancy.status == "open" %}
+        <a href="/application/start?vacancyId={{ vacancy.id }}" role="button" draggable="false" class="govuk-button" data-module="govuk-button">
+          Apply for this vacancy
+        </a>
+      {% else %}
+        <p class="govuk-body">This vacancy is currently closed for applications.</p>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

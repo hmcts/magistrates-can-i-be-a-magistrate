@@ -1,0 +1,78 @@
+{% extends "layouts/main.njk" %}
+
+{% set currentPage = "my-applications" %}
+
+{% block beforeContent %}
+  <a href="/application/{{ applicationId }}" class="govuk-back-link">Back to task list</a>
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      {% if errors and errors | length > 0 %}
+        <div class="govuk-error-summary" data-module="govuk-error-summary">
+          <div role="alert">
+            <h2 class="govuk-error-summary__title">There is a problem</h2>
+            <div class="govuk-error-summary__body">
+              <ul class="govuk-list govuk-error-summary__list">
+                {% for key, message in errors %}
+                  <li><a href="#{{ key }}">{{ message }}</a></li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
+      <h1 class="govuk-heading-xl">Declaration</h1>
+
+      <div class="govuk-warning-text">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+        <strong class="govuk-warning-text__text">
+          <span class="govuk-visually-hidden">Warning</span>
+          You could be prosecuted or your appointment terminated if you deliberately provide false or misleading information in your application.
+        </strong>
+      </div>
+
+      <form method="post" action="/application/{{ applicationId }}/declaration" novalidate>
+
+        <div class="govuk-form-group{% if errors.declarations %} govuk-form-group--error{% endif %}">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+              Please confirm the following
+            </legend>
+            {% if errors.declarations %}
+              <p id="declarations-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> {{ errors.declarations }}</p>
+            {% endif %}
+            <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+              <div class="govuk-checkboxes__item">
+                <input class="govuk-checkboxes__input" id="declarations" name="declarations" type="checkbox" value="informationTrue"{% if formData.declarations and "informationTrue" in formData.declarations %} checked{% endif %}>
+                <label class="govuk-label govuk-checkboxes__label" for="declarations">
+                  I confirm that all the information I have provided is true and complete to the best of my knowledge
+                </label>
+              </div>
+              <div class="govuk-checkboxes__item">
+                <input class="govuk-checkboxes__input" id="declarations-2" name="declarations" type="checkbox" value="consentDBS"{% if formData.declarations and "consentDBS" in formData.declarations %} checked{% endif %}>
+                <label class="govuk-label govuk-checkboxes__label" for="declarations-2">
+                  I consent to a Disclosure and Barring Service (DBS) check being carried out as part of this application
+                </label>
+              </div>
+              <div class="govuk-checkboxes__item">
+                <input class="govuk-checkboxes__input" id="declarations-3" name="declarations" type="checkbox" value="consentDataProcessing"{% if formData.declarations and "consentDataProcessing" in formData.declarations %} checked{% endif %}>
+                <label class="govuk-label govuk-checkboxes__label" for="declarations-3">
+                  I consent to the processing of my personal data in accordance with the privacy policy
+                </label>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <div class="govuk-button-group">
+          <button type="submit" class="govuk-button" data-module="govuk-button" name="action" value="save-and-continue">Save and continue</button>
+          <button type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button" name="action" value="save-and-return">Save and come back later</button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

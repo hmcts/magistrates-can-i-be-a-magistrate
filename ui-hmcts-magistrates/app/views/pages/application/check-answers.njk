@@ -1,0 +1,70 @@
+{% extends "layouts/main.njk" %}
+
+{% set currentPage = "my-applications" %}
+
+{% block beforeContent %}
+  <a href="/application/{{ application.id }}" class="govuk-back-link">Back to task list</a>
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <h1 class="govuk-heading-xl">Check your answers before submitting</h1>
+
+      {% for step in steps %}
+        {% set stepData = {} %}
+        {% for s in application.steps %}
+          {% if s.stepName == step.name %}
+            {% set stepData = s.formData or {} %}
+          {% endif %}
+        {% endfor %}
+
+        <h2 class="govuk-heading-m">{{ step.label }}</h2>
+
+        <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+          {% for key, value in stepData %}
+            {% if value and value.length > 0 %}
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                  {{ key }}
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  {% if value is iterable and value is not string %}
+                    <ul class="govuk-list">
+                      {% for item in value %}
+                        <li>{{ item }}</li>
+                      {% endfor %}
+                    </ul>
+                  {% else %}
+                    {{ value }}
+                  {% endif %}
+                </dd>
+                <dd class="govuk-summary-list__actions">
+                  <a class="govuk-link" href="/application/{{ application.id }}/{{ step.name }}">
+                    Change<span class="govuk-visually-hidden"> {{ key }}</span>
+                  </a>
+                </dd>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </dl>
+      {% endfor %}
+
+      <div class="govuk-warning-text">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+        <strong class="govuk-warning-text__text">
+          <span class="govuk-visually-hidden">Warning</span>
+          By submitting this application you are confirming that, to the best of your knowledge, the details you are providing are correct.
+        </strong>
+      </div>
+
+      <form method="post" action="/application/{{ application.id }}/submit">
+        <button type="submit" class="govuk-button" data-module="govuk-button" data-prevent-double-click="true">
+          Accept and submit application
+        </button>
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

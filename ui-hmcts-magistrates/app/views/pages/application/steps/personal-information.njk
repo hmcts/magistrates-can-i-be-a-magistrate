@@ -1,0 +1,202 @@
+{% extends "layouts/main.njk" %}
+
+{% set currentPage = "my-applications" %}
+
+{% block beforeContent %}
+  <a href="/application/{{ applicationId }}" class="govuk-back-link">Back to task list</a>
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      {% if errors and errors | length > 0 %}
+        <div class="govuk-error-summary" data-module="govuk-error-summary">
+          <div role="alert">
+            <h2 class="govuk-error-summary__title">There is a problem</h2>
+            <div class="govuk-error-summary__body">
+              <ul class="govuk-list govuk-error-summary__list">
+                {% for key, message in errors %}
+                  <li><a href="#{{ key }}">{{ message }}</a></li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
+      <h1 class="govuk-heading-xl">Personal information</h1>
+
+      <form method="post" action="/application/{{ applicationId }}/personal-information" novalidate>
+
+        <div class="govuk-form-group{% if errors.title %} govuk-form-group--error{% endif %}">
+          <label class="govuk-label" for="title">Title</label>
+          {% if errors.title %}
+            <p id="title-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> {{ errors.title }}</p>
+          {% endif %}
+          <select class="govuk-select{% if errors.title %} govuk-select--error{% endif %}" id="title" name="title">
+            <option value="">Select a title</option>
+            <option value="Mr"{% if formData.title == "Mr" %} selected{% endif %}>Mr</option>
+            <option value="Mrs"{% if formData.title == "Mrs" %} selected{% endif %}>Mrs</option>
+            <option value="Miss"{% if formData.title == "Miss" %} selected{% endif %}>Miss</option>
+            <option value="Ms"{% if formData.title == "Ms" %} selected{% endif %}>Ms</option>
+            <option value="Dr"{% if formData.title == "Dr" %} selected{% endif %}>Dr</option>
+            <option value="Other"{% if formData.title == "Other" %} selected{% endif %}>Other</option>
+          </select>
+        </div>
+
+        <div class="govuk-form-group{% if errors.firstName %} govuk-form-group--error{% endif %}">
+          <label class="govuk-label" for="firstName">First name</label>
+          <div id="firstName-hint" class="govuk-hint">As listed on your birth certificate</div>
+          {% if errors.firstName %}
+            <p id="firstName-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> {{ errors.firstName }}</p>
+          {% endif %}
+          <input class="govuk-input{% if errors.firstName %} govuk-input--error{% endif %}" id="firstName" name="firstName" type="text" value="{{ formData.firstName }}" aria-describedby="firstName-hint{% if errors.firstName %} firstName-error{% endif %}">
+        </div>
+
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="middleNames">Middle name(s)</label>
+          <div id="middleNames-hint" class="govuk-hint">Leave blank if you do not have a middle name</div>
+          <input class="govuk-input" id="middleNames" name="middleNames" type="text" value="{{ formData.middleNames }}" aria-describedby="middleNames-hint">
+        </div>
+
+        <div class="govuk-form-group{% if errors.familyName %} govuk-form-group--error{% endif %}">
+          <label class="govuk-label" for="familyName">Family name</label>
+          {% if errors.familyName %}
+            <p id="familyName-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> {{ errors.familyName }}</p>
+          {% endif %}
+          <input class="govuk-input{% if errors.familyName %} govuk-input--error{% endif %}" id="familyName" name="familyName" type="text" value="{{ formData.familyName }}">
+        </div>
+
+        <div class="govuk-form-group">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend">
+              Are you known by any other name or nickname?
+            </legend>
+            <div class="govuk-radios" data-module="govuk-radios">
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="knownByOtherName" name="knownByOtherName" type="radio" value="yes"{% if formData.knownByOtherName == "yes" %} checked{% endif %} data-aria-controls="conditional-knownByOtherName-yes">
+                <label class="govuk-label govuk-radios__label" for="knownByOtherName">Yes</label>
+              </div>
+              <div class="govuk-radios__conditional{% if formData.knownByOtherName != 'yes' %} govuk-radios__conditional--hidden{% endif %}" id="conditional-knownByOtherName-yes">
+                <div class="govuk-form-group">
+                  <label class="govuk-label" for="otherName">Other name</label>
+                  <input class="govuk-input" id="otherName" name="otherName" type="text" value="{{ formData.otherName }}">
+                </div>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="knownByOtherName-2" name="knownByOtherName" type="radio" value="no"{% if formData.knownByOtherName == "no" %} checked{% endif %}>
+                <label class="govuk-label govuk-radios__label" for="knownByOtherName-2">No</label>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+            Address
+          </legend>
+
+          <div class="govuk-form-group{% if errors.addressLine1 %} govuk-form-group--error{% endif %}">
+            <label class="govuk-label" for="addressLine1">Address line 1</label>
+            {% if errors.addressLine1 %}
+              <p id="addressLine1-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> {{ errors.addressLine1 }}</p>
+            {% endif %}
+            <input class="govuk-input{% if errors.addressLine1 %} govuk-input--error{% endif %}" id="addressLine1" name="addressLine1" type="text" value="{{ formData.addressLine1 }}" autocomplete="address-line1">
+          </div>
+
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="addressLine2">Address line 2 (optional)</label>
+            <input class="govuk-input" id="addressLine2" name="addressLine2" type="text" value="{{ formData.addressLine2 }}" autocomplete="address-line2">
+          </div>
+
+          <div class="govuk-form-group{% if errors.townCity %} govuk-form-group--error{% endif %}">
+            <label class="govuk-label" for="townCity">Town or city</label>
+            {% if errors.townCity %}
+              <p id="townCity-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> {{ errors.townCity }}</p>
+            {% endif %}
+            <input class="govuk-input govuk-!-width-two-thirds{% if errors.townCity %} govuk-input--error{% endif %}" id="townCity" name="townCity" type="text" value="{{ formData.townCity }}" autocomplete="address-level2">
+          </div>
+
+          <div class="govuk-form-group{% if errors.postcode %} govuk-form-group--error{% endif %}">
+            <label class="govuk-label" for="postcode">Postcode</label>
+            {% if errors.postcode %}
+              <p id="postcode-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> {{ errors.postcode }}</p>
+            {% endif %}
+            <input class="govuk-input govuk-input--width-10{% if errors.postcode %} govuk-input--error{% endif %}" id="postcode" name="postcode" type="text" value="{{ formData.postcode }}" autocomplete="postal-code">
+          </div>
+        </fieldset>
+
+        <div class="govuk-form-group{% if errors.country %} govuk-form-group--error{% endif %}">
+          <label class="govuk-label" for="country">Country</label>
+          {% if errors.country %}
+            <p id="country-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> {{ errors.country }}</p>
+          {% endif %}
+          <select class="govuk-select{% if errors.country %} govuk-select--error{% endif %}" id="country" name="country">
+            <option value="">Select a country</option>
+            <option value="United Kingdom"{% if formData.country == "United Kingdom" %} selected{% endif %}>United Kingdom</option>
+            <option value="Other"{% if formData.country == "Other" %} selected{% endif %}>Other</option>
+          </select>
+        </div>
+
+        <div class="govuk-form-group{% if errors.dateOfBirth %} govuk-form-group--error{% endif %}">
+          <fieldset class="govuk-fieldset" role="group" aria-describedby="dob-hint{% if errors.dateOfBirth %} dob-error{% endif %}">
+            <legend class="govuk-fieldset__legend">
+              Date of birth
+            </legend>
+            <div id="dob-hint" class="govuk-hint">For example, 27 3 1990</div>
+            {% if errors.dateOfBirth %}
+              <p id="dob-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> {{ errors.dateOfBirth }}</p>
+            {% endif %}
+            <div class="govuk-date-input" id="dateOfBirth">
+              <div class="govuk-date-input__item">
+                <div class="govuk-form-group">
+                  <label class="govuk-label govuk-date-input__label" for="dob-day">Day</label>
+                  <input class="govuk-input govuk-date-input__input govuk-input--width-2{% if errors.dateOfBirth %} govuk-input--error{% endif %}" id="dob-day" name="dob-day" type="text" inputmode="numeric" value="{{ formData['dob-day'] }}">
+                </div>
+              </div>
+              <div class="govuk-date-input__item">
+                <div class="govuk-form-group">
+                  <label class="govuk-label govuk-date-input__label" for="dob-month">Month</label>
+                  <input class="govuk-input govuk-date-input__input govuk-input--width-2{% if errors.dateOfBirth %} govuk-input--error{% endif %}" id="dob-month" name="dob-month" type="text" inputmode="numeric" value="{{ formData['dob-month'] }}">
+                </div>
+              </div>
+              <div class="govuk-date-input__item">
+                <div class="govuk-form-group">
+                  <label class="govuk-label govuk-date-input__label" for="dob-year">Year</label>
+                  <input class="govuk-input govuk-date-input__input govuk-input--width-4{% if errors.dateOfBirth %} govuk-input--error{% endif %}" id="dob-year" name="dob-year" type="text" inputmode="numeric" value="{{ formData['dob-year'] }}">
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <div class="govuk-form-group{% if errors.email %} govuk-form-group--error{% endif %}">
+          <label class="govuk-label" for="email">Email address</label>
+          {% if errors.email %}
+            <p id="email-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> {{ errors.email }}</p>
+          {% endif %}
+          <input class="govuk-input{% if errors.email %} govuk-input--error{% endif %}" id="email" name="email" type="email" value="{{ formData.email }}" autocomplete="email">
+        </div>
+
+        <div class="govuk-form-group{% if errors.phonePrimary %} govuk-form-group--error{% endif %}">
+          <label class="govuk-label" for="phonePrimary">Primary phone number</label>
+          {% if errors.phonePrimary %}
+            <p id="phonePrimary-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> {{ errors.phonePrimary }}</p>
+          {% endif %}
+          <input class="govuk-input govuk-input--width-20{% if errors.phonePrimary %} govuk-input--error{% endif %}" id="phonePrimary" name="phonePrimary" type="tel" value="{{ formData.phonePrimary }}" autocomplete="tel">
+        </div>
+
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="phoneSecondary">Secondary phone number (optional)</label>
+          <input class="govuk-input govuk-input--width-20" id="phoneSecondary" name="phoneSecondary" type="tel" value="{{ formData.phoneSecondary }}">
+        </div>
+
+        <div class="govuk-button-group">
+          <button type="submit" class="govuk-button" data-module="govuk-button" name="action" value="save-and-continue">Save and continue</button>
+          <button type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button" name="action" value="save-and-return">Save and come back later</button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}
