@@ -1,0 +1,61 @@
+{% extends "layouts/main.njk" %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+
+      <h1 class="govuk-heading-xl">Admin Dashboard</h1>
+
+      {% if error %}
+        <div class="govuk-error-summary" data-module="govuk-error-summary">
+          <h2 class="govuk-error-summary__title">There is a problem</h2>
+          <div class="govuk-error-summary__body">
+            <p class="govuk-body">{{ error }}</p>
+          </div>
+        </div>
+      {% endif %}
+
+      <div class="govuk-grid-row govuk-!-margin-bottom-6">
+        <div class="govuk-grid-column-one-fifth">
+          <div class="app-card">
+            <h2 class="govuk-heading-s govuk-!-margin-bottom-1">Total applications</h2>
+            <p class="govuk-heading-l govuk-!-margin-bottom-0">{{ summary.total or 0 }}</p>
+          </div>
+        </div>
+        <div class="govuk-grid-column-one-fifth">
+          <div class="app-card">
+            <h2 class="govuk-heading-s govuk-!-margin-bottom-1">Submitted</h2>
+            <p class="govuk-heading-l govuk-!-margin-bottom-0">{{ summary.submitted or 0 }}</p>
+          </div>
+        </div>
+        <div class="govuk-grid-column-one-fifth">
+          <div class="app-card">
+            <h2 class="govuk-heading-s govuk-!-margin-bottom-1">Under review</h2>
+            <p class="govuk-heading-l govuk-!-margin-bottom-0">{{ summary.underReview or 0 }}</p>
+          </div>
+        </div>
+        <div class="govuk-grid-column-one-fifth">
+          <div class="app-card">
+            <h2 class="govuk-heading-s govuk-!-margin-bottom-1">Accepted</h2>
+            <p class="govuk-heading-l govuk-!-margin-bottom-0">{{ summary.accepted or 0 }}</p>
+          </div>
+        </div>
+        <div class="govuk-grid-column-one-fifth">
+          <div class="app-card">
+            <h2 class="govuk-heading-s govuk-!-margin-bottom-1">Rejected</h2>
+            <p class="govuk-heading-l govuk-!-margin-bottom-0">{{ summary.rejected or 0 }}</p>
+          </div>
+        </div>
+      </div>
+
+      <h2 class="govuk-heading-m">Quick links</h2>
+
+      <ul class="govuk-list">
+        <li><a class="govuk-link" href="/admin/applications">View all applications</a></li>
+        <li><a class="govuk-link" href="/admin/reports">View reports</a></li>
+        <li><a class="govuk-link" href="/admin/sign-out">Sign out</a></li>
+      </ul>
+
+    </div>
+  </div>
+{% endblock %}

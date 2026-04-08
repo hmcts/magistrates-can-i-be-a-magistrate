@@ -1,0 +1,118 @@
+{% extends "layouts/main.njk" %}
+
+{% block beforeContent %}
+  <a href="/admin" class="govuk-back-link">Back to dashboard</a>
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+
+      <h1 class="govuk-heading-xl">Applications</h1>
+
+      {% if error %}
+        <div class="govuk-error-summary" data-module="govuk-error-summary">
+          <h2 class="govuk-error-summary__title">There is a problem</h2>
+          <div class="govuk-error-summary__body">
+            <p class="govuk-body">{{ error }}</p>
+          </div>
+        </div>
+      {% endif %}
+
+      <form method="get" action="/admin/applications" class="govuk-!-margin-bottom-6">
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-one-third">
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="search">Search by name or reference</label>
+              <input class="govuk-input" id="search" name="search" type="text" value="{{ filters.search }}">
+            </div>
+          </div>
+          <div class="govuk-grid-column-one-quarter">
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="status">Status</label>
+              <select class="govuk-select" id="status" name="status">
+                <option value="">All statuses</option>
+                <option value="submitted"{% if filters.status == "submitted" %} selected{% endif %}>Submitted</option>
+                <option value="under_review"{% if filters.status == "under_review" %} selected{% endif %}>Under review</option>
+                <option value="accepted"{% if filters.status == "accepted" %} selected{% endif %}>Accepted</option>
+                <option value="rejected"{% if filters.status == "rejected" %} selected{% endif %}>Rejected</option>
+              </select>
+            </div>
+          </div>
+          <div class="govuk-grid-column-one-quarter">
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="region">Region</label>
+              <select class="govuk-select" id="region" name="region">
+                <option value="">All regions</option>
+                <option value="London"{% if filters.region == "London" %} selected{% endif %}>London</option>
+                <option value="South East"{% if filters.region == "South East" %} selected{% endif %}>South East</option>
+                <option value="South West"{% if filters.region == "South West" %} selected{% endif %}>South West</option>
+                <option value="Midlands"{% if filters.region == "Midlands" %} selected{% endif %}>Midlands</option>
+                <option value="North West"{% if filters.region == "North West" %} selected{% endif %}>North West</option>
+                <option value="North East"{% if filters.region == "North East" %} selected{% endif %}>North East</option>
+                <option value="Wales"{% if filters.region == "Wales" %} selected{% endif %}>Wales</option>
+              </select>
+            </div>
+          </div>
+          <div class="govuk-grid-column-one-sixth govuk-!-padding-top-6">
+            <button type="submit" class="govuk-button" data-module="govuk-button">Search</button>
+          </div>
+        </div>
+      </form>
+
+      <div class="govuk-!-margin-bottom-4">
+        <a class="govuk-link" href="/admin/applications/export/csv{% if filters.status %}?status={{ filters.status }}{% endif %}">Export as CSV</a>
+      </div>
+
+      {% if applications and applications.length > 0 %}
+        <table class="govuk-table">
+          <caption class="govuk-table__caption govuk-table__caption--m">
+            {{ totalElements }} application{{ "s" if totalElements != 1 }} found
+          </caption>
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th scope="col" class="govuk-table__header">Reference</th>
+              <th scope="col" class="govuk-table__header">Applicant</th>
+              <th scope="col" class="govuk-table__header">Vacancy</th>
+              <th scope="col" class="govuk-table__header">Region</th>
+              <th scope="col" class="govuk-table__header">Status</th>
+              <th scope="col" class="govuk-table__header">Submitted</th>
+              <th scope="col" class="govuk-table__header">Action</th>
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body">
+            {% for app in applications %}
+              <tr class="govuk-table__row">
+                <td class="govuk-table__cell">{{ app.reference }}</td>
+                <td class="govuk-table__cell">{{ app.applicantName or "—" }}</td>
+                <td class="govuk-table__cell">{{ app.vacancyTitle or "—" }}</td>
+                <td class="govuk-table__cell">{{ app.region or "—" }}</td>
+                <td class="govuk-table__cell">
+                  {% if app.status == "submitted" %}
+                    <strong class="govuk-tag">Submitted</strong>
+                  {% elif app.status == "under_review" %}
+                    <strong class="govuk-tag govuk-tag--light-blue">Under review</strong>
+                  {% elif app.status == "accepted" %}
+                    <strong class="govuk-tag govuk-tag--green">Accepted</strong>
+                  {% elif app.status == "rejected" %}
+                    <strong class="govuk-tag govuk-tag--red">Rejected</strong>
+                  {% else %}
+                    <strong class="govuk-tag govuk-tag--grey">{{ app.status }}</strong>
+                  {% endif %}
+                </td>
+                <td class="govuk-table__cell">{{ app.submittedAt }}</td>
+                <td class="govuk-table__cell">
+                  <a class="govuk-link" href="/admin/applications/{{ app.id }}">
+                    View<span class="govuk-visually-hidden"> application {{ app.reference }}</span>
+                  </a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p class="govuk-body">No applications found matching your search criteria.</p>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

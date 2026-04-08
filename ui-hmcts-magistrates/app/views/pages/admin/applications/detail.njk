@@ -1,0 +1,138 @@
+{% extends "layouts/main.njk" %}
+
+{% block beforeContent %}
+  <a href="/admin/applications" class="govuk-back-link">Back to applications</a>
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+
+      {% if success %}
+        <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+          <div class="govuk-notification-banner__header">
+            <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">Success</h2>
+          </div>
+          <div class="govuk-notification-banner__content">
+            <p class="govuk-body">Application status has been updated.</p>
+          </div>
+        </div>
+      {% endif %}
+
+      <h1 class="govuk-heading-xl">
+        Application {{ application.reference }}
+        <span class="govuk-!-margin-left-2">
+          {% if application.status == "submitted" %}
+            <strong class="govuk-tag">Submitted</strong>
+          {% elif application.status == "under_review" %}
+            <strong class="govuk-tag govuk-tag--light-blue">Under review</strong>
+          {% elif application.status == "accepted" %}
+            <strong class="govuk-tag govuk-tag--green">Accepted</strong>
+          {% elif application.status == "rejected" %}
+            <strong class="govuk-tag govuk-tag--red">Rejected</strong>
+          {% else %}
+            <strong class="govuk-tag govuk-tag--grey">{{ application.status }}</strong>
+          {% endif %}
+        </span>
+      </h1>
+
+      <dl class="govuk-summary-list govuk-!-margin-bottom-6">
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Reference</dt>
+          <dd class="govuk-summary-list__value">{{ application.reference }}</dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Applicant</dt>
+          <dd class="govuk-summary-list__value">{{ application.applicantName or "—" }}</dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Vacancy</dt>
+          <dd class="govuk-summary-list__value">{{ application.vacancyTitle or "—" }}</dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Date submitted</dt>
+          <dd class="govuk-summary-list__value">{{ application.submittedAt }}</dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Last updated</dt>
+          <dd class="govuk-summary-list__value">{{ application.updatedAt }}</dd>
+        </div>
+      </dl>
+
+      <div class="govuk-grid-row govuk-!-margin-bottom-6">
+        <div class="govuk-grid-column-two-thirds">
+          <h2 class="govuk-heading-m">Update status</h2>
+          <form method="post" action="/admin/applications/{{ application.id }}/status">
+            <div class="govuk-grid-row">
+              <div class="govuk-grid-column-one-half">
+                <div class="govuk-form-group">
+                  <label class="govuk-label" for="status">New status</label>
+                  <select class="govuk-select" id="status" name="status">
+                    <option value="submitted"{% if application.status == "submitted" %} selected{% endif %}>Submitted</option>
+                    <option value="under_review"{% if application.status == "under_review" %} selected{% endif %}>Under review</option>
+                    <option value="accepted"{% if application.status == "accepted" %} selected{% endif %}>Accepted</option>
+                    <option value="rejected"{% if application.status == "rejected" %} selected{% endif %}>Rejected</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="reason">Reason for status change (optional)</label>
+              <textarea class="govuk-textarea" id="reason" name="reason" rows="3"></textarea>
+            </div>
+            <button type="submit" class="govuk-button" data-module="govuk-button">Update status</button>
+          </form>
+        </div>
+        <div class="govuk-grid-column-one-third">
+          <h2 class="govuk-heading-m">Export</h2>
+          <a class="govuk-link" href="/admin/applications/{{ application.id }}/export/pdf">Download as PDF</a>
+        </div>
+      </div>
+
+      <h2 class="govuk-heading-l">Application details</h2>
+
+      {% if application.steps and application.steps.length > 0 %}
+        {% for step in application.steps %}
+          <details class="govuk-details govuk-!-margin-bottom-6" data-module="govuk-details">
+            <summary class="govuk-details__summary">
+              <span class="govuk-details__summary-text">
+                {{ step.stepName }}
+              </span>
+            </summary>
+            <div class="govuk-details__text">
+              {% if step.formData %}
+                <dl class="govuk-summary-list">
+                  {% for key, value in step.formData %}
+                    {% if value and value.length > 0 %}
+                      <div class="govuk-summary-list__row">
+                        <dt class="govuk-summary-list__key">
+                          {{ key }}
+                        </dt>
+                        <dd class="govuk-summary-list__value">
+                          {% if value is iterable and value is not string %}
+                            <ul class="govuk-list">
+                              {% for item in value %}
+                                <li>{{ item }}</li>
+                              {% endfor %}
+                            </ul>
+                          {% else %}
+                            {{ value }}
+                          {% endif %}
+                        </dd>
+                      </div>
+                    {% endif %}
+                  {% endfor %}
+                </dl>
+              {% else %}
+                <p class="govuk-body">No data submitted for this section.</p>
+              {% endif %}
+            </div>
+          </details>
+        {% endfor %}
+      {% else %}
+        <p class="govuk-body">No application data available.</p>
+      {% endif %}
+
+    </div>
+  </div>
+{% endblock %}

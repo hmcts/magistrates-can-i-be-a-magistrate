@@ -1,0 +1,23 @@
+/* Custom styles for the Magistrates Recruitment UI */
+/* GOV.UK Frontend handles most styling via its components and utility classes */
+
+/* Admin dashboard cards */
+.app-card {
+  border: 1px solid #b1b4b6;
+  padding: 15px;
+  margin-bottom: 15px;
+  background-color: #f3f2f1;
+}
+
+/* Ensure task list items are properly spaced */
+.govuk-task-list__item {
+  min-height: 40px;
+}
+
+/* Responsive table adjustments for smaller screens */
+@media (max-width: 48.0525em) {
+  .govuk-table__header,
+  .govuk-table__cell {
+    font-size: 14px;
+  }
+}

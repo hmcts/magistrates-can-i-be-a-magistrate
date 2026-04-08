@@ -1,0 +1,73 @@
+{% extends "layouts/main.njk" %}
+
+{% set currentPage = "my-applications" %}
+
+{% block beforeContent %}
+  <div class="govuk-breadcrumbs">
+    <ol class="govuk-breadcrumbs__list">
+      <li class="govuk-breadcrumbs__list-item">
+        <a class="govuk-breadcrumbs__link" href="/">Home</a>
+      </li>
+      <li class="govuk-breadcrumbs__list-item">
+        <a class="govuk-breadcrumbs__link" href="/application/my-applications">My applications</a>
+      </li>
+      <li class="govuk-breadcrumbs__list-item" aria-current="page">Application {{ application.reference }}</li>
+    </ol>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">Application {{ application.reference }}</h1>
+
+      <p class="govuk-body govuk-!-margin-bottom-7">
+        You have completed {{ completedCount }} of {{ steps.length }} sections.
+      </p>
+
+      <ol class="govuk-task-list">
+        {% for step in steps %}
+          <li class="govuk-task-list__item govuk-task-list__item--with-link">
+            <div class="govuk-task-list__name-and-hint">
+              <a class="govuk-link govuk-task-list__link"
+                 href="/application/{{ application.id }}/{{ step.name }}"
+                 aria-describedby="step-{{ loop.index }}-status">
+                {{ step.label }}
+              </a>
+            </div>
+            <div class="govuk-task-list__status" id="step-{{ loop.index }}-status">
+              {% if step.isComplete %}
+                <strong class="govuk-tag">Completed</strong>
+              {% elif step.hasData %}
+                <strong class="govuk-tag govuk-tag--light-blue">In progress</strong>
+              {% else %}
+                <strong class="govuk-tag govuk-tag--grey">Not yet started</strong>
+              {% endif %}
+            </div>
+          </li>
+        {% endfor %}
+
+        <li class="govuk-task-list__item govuk-task-list__item--with-link">
+          <div class="govuk-task-list__name-and-hint">
+            {% if allComplete %}
+              <a class="govuk-link govuk-task-list__link" href="/application/{{ application.id }}/check-answers">
+                Check and submit your application
+              </a>
+            {% else %}
+              <span>Check and submit your application</span>
+            {% endif %}
+          </div>
+          <div class="govuk-task-list__status">
+            {% if application.status == "submitted" %}
+              <strong class="govuk-tag">Submitted</strong>
+            {% elif allComplete %}
+              <strong class="govuk-tag govuk-tag--blue">Ready to submit</strong>
+            {% else %}
+              <span class="govuk-task-list__status--cannot-start">Cannot start yet</span>
+            {% endif %}
+          </div>
+        </li>
+      </ol>
+    </div>
+  </div>
+{% endblock %}

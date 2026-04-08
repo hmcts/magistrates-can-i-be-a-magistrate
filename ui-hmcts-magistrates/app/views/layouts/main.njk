@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" class="govuk-template">
+  <head>
+    <meta charset="utf-8">
+    <title>{% block pageTitle %}{{ serviceName }}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <link rel="stylesheet" href="/govuk-frontend/govuk-frontend.min.css">
+    <link rel="stylesheet" href="/public/stylesheets/application.css">
+  </head>
+  <body class="govuk-template__body">
+    <script>document.body.className += ' js-enabled';</script>
+
+    <a href="#main-content" class="govuk-skip-link" data-module="govuk-skip-link">Skip to main content</a>
+
+    <header class="govuk-header" data-module="govuk-header">
+      <div class="govuk-header__container govuk-width-container">
+        <div class="govuk-header__logo">
+          <a href="/" class="govuk-header__link govuk-header__link--homepage">
+            <span class="govuk-header__logotype-text">GOV.UK</span>
+          </a>
+        </div>
+        <div class="govuk-header__content">
+          <a href="/" class="govuk-header__link govuk-header__service-name">{{ serviceName }}</a>
+          <nav class="govuk-header__navigation" aria-label="Menu">
+            <button type="button" class="govuk-header__menu-button govuk-js-header-toggle" aria-controls="navigation" aria-label="Show or hide menu" hidden>Menu</button>
+            <ul id="navigation" class="govuk-header__navigation-list">
+              <li class="govuk-header__navigation-item"><a class="govuk-header__link" href="/vacancies">Vacancies</a></li>
+              {% if session.user %}
+                <li class="govuk-header__navigation-item"><a class="govuk-header__link" href="/application/my-applications">My applications</a></li>
+                <li class="govuk-header__navigation-item"><a class="govuk-header__link" href="/auth/sign-out">Sign out ({{ session.user.firstName }})</a></li>
+              {% else %}
+                <li class="govuk-header__navigation-item"><a class="govuk-header__link" href="/auth/sign-in">Sign in</a></li>
+              {% endif %}
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <div class="govuk-width-container">
+      <div class="govuk-phase-banner">
+        <p class="govuk-phase-banner__content">
+          <strong class="govuk-tag govuk-phase-banner__content__tag">Beta</strong>
+          <span class="govuk-phase-banner__text">This is a new service. Help us improve it by <a class="govuk-link" href="#">giving feedback</a>.</span>
+        </p>
+      </div>
+
+      {% block beforeContent %}{% endblock %}
+
+      <main class="govuk-main-wrapper" id="main-content" role="main">
+        {% block content %}{% endblock %}
+      </main>
+    </div>
+
+    <footer class="govuk-footer">
+      <div class="govuk-width-container">
+        <div class="govuk-footer__meta">
+          <div class="govuk-footer__meta-item govuk-footer__meta-item--grow">
+            <span class="govuk-footer__licence-description">
+              All content is available under the <a class="govuk-footer__link" href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">Open Government Licence v3.0</a>, except where otherwise stated
+            </span>
+          </div>
+          <div class="govuk-footer__meta-item">
+            <a class="govuk-footer__link govuk-footer__copyright-logo" href="https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/uk-government-licensing-framework/crown-copyright/">Crown copyright</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="/govuk-frontend/govuk-frontend.min.js"></script>
+    <script>window.GOVUKFrontend.initAll()</script>
+  </body>
+</html>

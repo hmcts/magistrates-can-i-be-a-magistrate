@@ -1,0 +1,48 @@
+{% extends "layouts/main.njk" %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">Apply to be a magistrate</h1>
+
+      <p class="govuk-body-l">Use this service to apply to become a magistrate (also known as a Justice of the Peace).</p>
+
+      <p class="govuk-body">Magistrates are volunteers who hear cases in courts in their community. You do not need legal training or qualifications.</p>
+
+      <p class="govuk-body">You can use this service to:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>find vacancies in your area</li>
+        <li>apply to become a magistrate</li>
+        <li>save your application and return to it later</li>
+      </ul>
+
+      <h2 class="govuk-heading-m">Before you start</h2>
+
+      <p class="govuk-body">You will need:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>to have visited a magistrates' court at least twice (for criminal court applications)</li>
+        <li>written consent from your employer</li>
+        <li>details of 2 referees</li>
+      </ul>
+
+      <p class="govuk-body">The application takes about 30 minutes to complete.</p>
+
+      <a href="/vacancies" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">
+        Start now
+        <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" aria-hidden="true" focusable="false">
+          <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z"/>
+        </svg>
+      </a>
+    </div>
+
+    <div class="govuk-grid-column-one-third">
+      <aside class="govuk-!-padding-top-4">
+        <h2 class="govuk-heading-s">Related content</h2>
+        <ul class="govuk-list">
+          <li><a class="govuk-link" href="https://magistrates.judiciary.uk" target="_blank">About being a magistrate</a></li>
+          <li><a class="govuk-link" href="https://magistrates.judiciary.uk/application-process/" target="_blank">Application guidance</a></li>
+        </ul>
+      </aside>
+    </div>
+  </div>
+{% endblock %}

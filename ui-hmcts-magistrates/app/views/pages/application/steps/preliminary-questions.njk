@@ -1,0 +1,97 @@
+{% extends "layouts/main.njk" %}
+
+{% set currentPage = "my-applications" %}
+
+{% block beforeContent %}
+  <a href="/application/{{ applicationId }}" class="govuk-back-link">Back to task list</a>
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      {% if errors and errors | length > 0 %}
+        <div class="govuk-error-summary" data-module="govuk-error-summary">
+          <div role="alert">
+            <h2 class="govuk-error-summary__title">There is a problem</h2>
+            <div class="govuk-error-summary__body">
+              <ul class="govuk-list govuk-error-summary__list">
+                {% for key, message in errors %}
+                  <li><a href="#{{ key }}">{{ message }}</a></li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
+      <h1 class="govuk-heading-xl">Preliminary questions</h1>
+
+      <form method="post" action="/application/{{ applicationId }}/preliminary-questions" novalidate>
+
+        <div class="govuk-form-group{% if errors.whyMagistrate %} govuk-form-group--error{% endif %}">
+          <label class="govuk-label govuk-label--m" for="whyMagistrate">Why do you want to be a magistrate?</label>
+          <div id="whyMagistrate-hint" class="govuk-hint">Explain your motivation for applying. Maximum 2000 characters.</div>
+          {% if errors.whyMagistrate %}
+            <p id="whyMagistrate-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> {{ errors.whyMagistrate }}</p>
+          {% endif %}
+          <textarea class="govuk-textarea{% if errors.whyMagistrate %} govuk-textarea--error{% endif %}" id="whyMagistrate" name="whyMagistrate" rows="5" maxlength="2000" aria-describedby="whyMagistrate-hint{% if errors.whyMagistrate %} whyMagistrate-error{% endif %}">{{ formData.whyMagistrate }}</textarea>
+        </div>
+
+        <div class="govuk-form-group{% if errors.courtTypePreference %} govuk-form-group--error{% endif %}">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+              Which type of court would you prefer to sit in?
+            </legend>
+            {% if errors.courtTypePreference %}
+              <p id="courtTypePreference-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> {{ errors.courtTypePreference }}</p>
+            {% endif %}
+            <div class="govuk-radios" data-module="govuk-radios">
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="courtTypePreference" name="courtTypePreference" type="radio" value="Criminal"{% if formData.courtTypePreference == "Criminal" %} checked{% endif %}>
+                <label class="govuk-label govuk-radios__label" for="courtTypePreference">Criminal</label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="courtTypePreference-2" name="courtTypePreference" type="radio" value="Family"{% if formData.courtTypePreference == "Family" %} checked{% endif %}>
+                <label class="govuk-label govuk-radios__label" for="courtTypePreference-2">Family</label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="courtTypePreference-3" name="courtTypePreference" type="radio" value="Both"{% if formData.courtTypePreference == "Both" %} checked{% endif %}>
+                <label class="govuk-label govuk-radios__label" for="courtTypePreference-3">Both</label>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <div class="govuk-form-group{% if errors.howHeard %} govuk-form-group--error{% endif %}">
+          <label class="govuk-label govuk-label--m" for="howHeard">How did you hear about this role?</label>
+          {% if errors.howHeard %}
+            <p id="howHeard-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> {{ errors.howHeard }}</p>
+          {% endif %}
+          <select class="govuk-select{% if errors.howHeard %} govuk-select--error{% endif %}" id="howHeard" name="howHeard">
+            <option value="">Select an option</option>
+            <option value="Online search"{% if formData.howHeard == "Online search" %} selected{% endif %}>Online search</option>
+            <option value="Social media"{% if formData.howHeard == "Social media" %} selected{% endif %}>Social media</option>
+            <option value="Word of mouth"{% if formData.howHeard == "Word of mouth" %} selected{% endif %}>Word of mouth</option>
+            <option value="Employer"{% if formData.howHeard == "Employer" %} selected{% endif %}>Employer</option>
+            <option value="Other"{% if formData.howHeard == "Other" %} selected{% endif %}>Other</option>
+          </select>
+        </div>
+
+        <div class="govuk-form-group{% if errors.courtObservations %} govuk-form-group--error{% endif %}">
+          <label class="govuk-label govuk-label--m" for="courtObservations">Court observations and reflections</label>
+          <div id="courtObservations-hint" class="govuk-hint">Describe your court visits, including what you observed and what you learned. Maximum 3000 characters.</div>
+          {% if errors.courtObservations %}
+            <p id="courtObservations-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> {{ errors.courtObservations }}</p>
+          {% endif %}
+          <textarea class="govuk-textarea{% if errors.courtObservations %} govuk-textarea--error{% endif %}" id="courtObservations" name="courtObservations" rows="5" maxlength="3000" aria-describedby="courtObservations-hint{% if errors.courtObservations %} courtObservations-error{% endif %}">{{ formData.courtObservations }}</textarea>
+        </div>
+
+        <div class="govuk-button-group">
+          <button type="submit" class="govuk-button" data-module="govuk-button" name="action" value="save-and-continue">Save and continue</button>
+          <button type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button" name="action" value="save-and-return">Save and come back later</button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

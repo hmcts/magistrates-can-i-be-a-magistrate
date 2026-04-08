@@ -1,0 +1,145 @@
+{% extends "layouts/main.njk" %}
+
+{% set currentPage = "my-applications" %}
+
+{% block beforeContent %}
+  <a href="/application/{{ applicationId }}" class="govuk-back-link">Back to task list</a>
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      {% if errors and errors | length > 0 %}
+        <div class="govuk-error-summary" data-module="govuk-error-summary">
+          <div role="alert">
+            <h2 class="govuk-error-summary__title">There is a problem</h2>
+            <div class="govuk-error-summary__body">
+              <ul class="govuk-list govuk-error-summary__list">
+                {% for key, message in errors %}
+                  <li><a href="#{{ key }}">{{ message }}</a></li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
+      <h1 class="govuk-heading-xl">Additional information</h1>
+
+      <form method="post" action="/application/{{ applicationId }}/additional-information" novalidate>
+
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+            Referee 1
+          </legend>
+
+          <div class="govuk-form-group{% if errors.referee1FullName %} govuk-form-group--error{% endif %}">
+            <label class="govuk-label" for="referee1FullName">Full name</label>
+            {% if errors.referee1FullName %}
+              <p id="referee1FullName-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> {{ errors.referee1FullName }}</p>
+            {% endif %}
+            <input class="govuk-input{% if errors.referee1FullName %} govuk-input--error{% endif %}" id="referee1FullName" name="referee1FullName" type="text" value="{{ formData.referee1FullName }}" autocomplete="off">
+          </div>
+
+          <div class="govuk-form-group{% if errors.referee1Relationship %} govuk-form-group--error{% endif %}">
+            <label class="govuk-label" for="referee1Relationship">Relationship to you</label>
+            <div id="referee1Relationship-hint" class="govuk-hint">For example, manager, colleague, friend</div>
+            {% if errors.referee1Relationship %}
+              <p id="referee1Relationship-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> {{ errors.referee1Relationship }}</p>
+            {% endif %}
+            <input class="govuk-input{% if errors.referee1Relationship %} govuk-input--error{% endif %}" id="referee1Relationship" name="referee1Relationship" type="text" value="{{ formData.referee1Relationship }}" aria-describedby="referee1Relationship-hint">
+          </div>
+
+          <div class="govuk-form-group{% if errors.referee1Email %} govuk-form-group--error{% endif %}">
+            <label class="govuk-label" for="referee1Email">Email address</label>
+            {% if errors.referee1Email %}
+              <p id="referee1Email-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> {{ errors.referee1Email }}</p>
+            {% endif %}
+            <input class="govuk-input{% if errors.referee1Email %} govuk-input--error{% endif %}" id="referee1Email" name="referee1Email" type="email" value="{{ formData.referee1Email }}" autocomplete="off">
+          </div>
+
+          <div class="govuk-form-group{% if errors.referee1Phone %} govuk-form-group--error{% endif %}">
+            <label class="govuk-label" for="referee1Phone">Phone number</label>
+            {% if errors.referee1Phone %}
+              <p id="referee1Phone-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> {{ errors.referee1Phone }}</p>
+            {% endif %}
+            <input class="govuk-input govuk-input--width-20{% if errors.referee1Phone %} govuk-input--error{% endif %}" id="referee1Phone" name="referee1Phone" type="tel" value="{{ formData.referee1Phone }}" autocomplete="off">
+          </div>
+
+          <div class="govuk-form-group{% if errors.referee1Address %} govuk-form-group--error{% endif %}">
+            <label class="govuk-label" for="referee1Address">Address</label>
+            {% if errors.referee1Address %}
+              <p id="referee1Address-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> {{ errors.referee1Address }}</p>
+            {% endif %}
+            <textarea class="govuk-textarea{% if errors.referee1Address %} govuk-textarea--error{% endif %}" id="referee1Address" name="referee1Address" rows="3">{{ formData.referee1Address }}</textarea>
+          </div>
+        </fieldset>
+
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+            Referee 2
+          </legend>
+
+          <div class="govuk-form-group{% if errors.referee2FullName %} govuk-form-group--error{% endif %}">
+            <label class="govuk-label" for="referee2FullName">Full name</label>
+            {% if errors.referee2FullName %}
+              <p id="referee2FullName-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> {{ errors.referee2FullName }}</p>
+            {% endif %}
+            <input class="govuk-input{% if errors.referee2FullName %} govuk-input--error{% endif %}" id="referee2FullName" name="referee2FullName" type="text" value="{{ formData.referee2FullName }}" autocomplete="off">
+          </div>
+
+          <div class="govuk-form-group{% if errors.referee2Relationship %} govuk-form-group--error{% endif %}">
+            <label class="govuk-label" for="referee2Relationship">Relationship to you</label>
+            <div id="referee2Relationship-hint" class="govuk-hint">For example, manager, colleague, friend</div>
+            {% if errors.referee2Relationship %}
+              <p id="referee2Relationship-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> {{ errors.referee2Relationship }}</p>
+            {% endif %}
+            <input class="govuk-input{% if errors.referee2Relationship %} govuk-input--error{% endif %}" id="referee2Relationship" name="referee2Relationship" type="text" value="{{ formData.referee2Relationship }}" aria-describedby="referee2Relationship-hint">
+          </div>
+
+          <div class="govuk-form-group{% if errors.referee2Email %} govuk-form-group--error{% endif %}">
+            <label class="govuk-label" for="referee2Email">Email address</label>
+            {% if errors.referee2Email %}
+              <p id="referee2Email-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> {{ errors.referee2Email }}</p>
+            {% endif %}
+            <input class="govuk-input{% if errors.referee2Email %} govuk-input--error{% endif %}" id="referee2Email" name="referee2Email" type="email" value="{{ formData.referee2Email }}" autocomplete="off">
+          </div>
+
+          <div class="govuk-form-group{% if errors.referee2Phone %} govuk-form-group--error{% endif %}">
+            <label class="govuk-label" for="referee2Phone">Phone number</label>
+            {% if errors.referee2Phone %}
+              <p id="referee2Phone-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> {{ errors.referee2Phone }}</p>
+            {% endif %}
+            <input class="govuk-input govuk-input--width-20{% if errors.referee2Phone %} govuk-input--error{% endif %}" id="referee2Phone" name="referee2Phone" type="tel" value="{{ formData.referee2Phone }}" autocomplete="off">
+          </div>
+
+          <div class="govuk-form-group{% if errors.referee2Address %} govuk-form-group--error{% endif %}">
+            <label class="govuk-label" for="referee2Address">Address</label>
+            {% if errors.referee2Address %}
+              <p id="referee2Address-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> {{ errors.referee2Address }}</p>
+            {% endif %}
+            <textarea class="govuk-textarea{% if errors.referee2Address %} govuk-textarea--error{% endif %}" id="referee2Address" name="referee2Address" rows="3">{{ formData.referee2Address }}</textarea>
+          </div>
+        </fieldset>
+
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-label--m" for="additionalInfo">Additional information to support your application (optional)</label>
+          <div id="additionalInfo-hint" class="govuk-hint">Include anything else you think is relevant. Maximum 2000 characters.</div>
+          <textarea class="govuk-textarea" id="additionalInfo" name="additionalInfo" rows="5" maxlength="2000" aria-describedby="additionalInfo-hint">{{ formData.additionalInfo }}</textarea>
+        </div>
+
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-label--m" for="reasonableAdjustments">Do you have any reasonable adjustment needs? (optional)</label>
+          <div id="reasonableAdjustments-hint" class="govuk-hint">Let us know if you need any adjustments during the application or interview process.</div>
+          <textarea class="govuk-textarea" id="reasonableAdjustments" name="reasonableAdjustments" rows="5" aria-describedby="reasonableAdjustments-hint">{{ formData.reasonableAdjustments }}</textarea>
+        </div>
+
+        <div class="govuk-button-group">
+          <button type="submit" class="govuk-button" data-module="govuk-button" name="action" value="save-and-continue">Save and continue</button>
+          <button type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button" name="action" value="save-and-return">Save and come back later</button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends "layouts/main.njk" %}
+
+{% set currentPage = "my-applications" %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <h1 class="govuk-heading-xl">My applications</h1>
+
+      {% if error %}
+        <div class="govuk-error-summary" data-module="govuk-error-summary">
+          <h2 class="govuk-error-summary__title">There is a problem</h2>
+          <div class="govuk-error-summary__body">
+            <p class="govuk-body">{{ error }}</p>
+          </div>
+        </div>
+      {% endif %}
+
+      {% if applications and applications.length > 0 %}
+        <table class="govuk-table">
+          <caption class="govuk-table__caption govuk-table__caption--m">Your applications</caption>
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th scope="col" class="govuk-table__header">Reference</th>
+              <th scope="col" class="govuk-table__header">Vacancy</th>
+              <th scope="col" class="govuk-table__header">Status</th>
+              <th scope="col" class="govuk-table__header">Date started</th>
+              <th scope="col" class="govuk-table__header">Action</th>
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body">
+            {% for app in applications %}
+              <tr class="govuk-table__row">
+                <td class="govuk-table__cell">{{ app.reference }}</td>
+                <td class="govuk-table__cell">{{ app.vacancyTitle or "—" }}</td>
+                <td class="govuk-table__cell">
+                  {% if app.status == "draft" %}
+                    <strong class="govuk-tag govuk-tag--grey">Draft</strong>
+                  {% elif app.status == "submitted" %}
+                    <strong class="govuk-tag">Submitted</strong>
+                  {% elif app.status == "under_review" %}
+                    <strong class="govuk-tag govuk-tag--light-blue">Under review</strong>
+                  {% elif app.status == "accepted" %}
+                    <strong class="govuk-tag govuk-tag--green">Accepted</strong>
+                  {% elif app.status == "rejected" %}
+                    <strong class="govuk-tag govuk-tag--red">Rejected</strong>
+                  {% else %}
+                    <strong class="govuk-tag govuk-tag--grey">{{ app.status }}</strong>
+                  {% endif %}
+                </td>
+                <td class="govuk-table__cell">{{ app.createdAt }}</td>
+                <td class="govuk-table__cell">
+                  {% if app.status == "draft" %}
+                    <a class="govuk-link" href="/application/{{ app.id }}">Continue<span class="govuk-visually-hidden"> application {{ app.reference }}</span></a>
+                  {% else %}
+                    <a class="govuk-link" href="/application/{{ app.id }}">View<span class="govuk-visually-hidden"> application {{ app.reference }}</span></a>
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p class="govuk-body">You have not started any applications yet.</p>
+        <a href="/vacancies" role="button" draggable="false" class="govuk-button" data-module="govuk-button">
+          Find a vacancy
+        </a>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

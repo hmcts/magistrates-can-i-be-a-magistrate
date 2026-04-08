@@ -1,0 +1,132 @@
+{% extends "layouts/main.njk" %}
+
+{% set currentPage = "my-applications" %}
+
+{% block beforeContent %}
+  <a href="/application/{{ applicationId }}" class="govuk-back-link">Back to task list</a>
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      {% if errors and errors | length > 0 %}
+        <div class="govuk-error-summary" data-module="govuk-error-summary">
+          <div role="alert">
+            <h2 class="govuk-error-summary__title">There is a problem</h2>
+            <div class="govuk-error-summary__body">
+              <ul class="govuk-list govuk-error-summary__list">
+                {% for key, message in errors %}
+                  <li><a href="#{{ key }}">{{ message }}</a></li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
+      <h1 class="govuk-heading-xl">Employment questions</h1>
+
+      <form method="post" action="/application/{{ applicationId }}/employment-questions" novalidate>
+
+        <div class="govuk-form-group{% if errors.employmentStatus %} govuk-form-group--error{% endif %}">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+              What is your current employment status?
+            </legend>
+            {% if errors.employmentStatus %}
+              <p id="employmentStatus-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> {{ errors.employmentStatus }}</p>
+            {% endif %}
+            <div class="govuk-radios" data-module="govuk-radios">
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="employmentStatus" name="employmentStatus" type="radio" value="Employed"{% if formData.employmentStatus == "Employed" %} checked{% endif %} data-aria-controls="conditional-employmentStatus-employed">
+                <label class="govuk-label govuk-radios__label" for="employmentStatus">Employed</label>
+              </div>
+              <div class="govuk-radios__conditional{% if formData.employmentStatus != 'Employed' %} govuk-radios__conditional--hidden{% endif %}" id="conditional-employmentStatus-employed">
+                <div class="govuk-form-group{% if errors.employerName %} govuk-form-group--error{% endif %}">
+                  <label class="govuk-label" for="employerName">Employer name</label>
+                  {% if errors.employerName %}
+                    <p id="employerName-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> {{ errors.employerName }}</p>
+                  {% endif %}
+                  <input class="govuk-input{% if errors.employerName %} govuk-input--error{% endif %}" id="employerName" name="employerName" type="text" value="{{ formData.employerName }}">
+                </div>
+
+                <div class="govuk-form-group{% if errors.jobTitle %} govuk-form-group--error{% endif %}">
+                  <label class="govuk-label" for="jobTitle">Job title</label>
+                  {% if errors.jobTitle %}
+                    <p id="jobTitle-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> {{ errors.jobTitle }}</p>
+                  {% endif %}
+                  <input class="govuk-input{% if errors.jobTitle %} govuk-input--error{% endif %}" id="jobTitle" name="jobTitle" type="text" value="{{ formData.jobTitle }}">
+                </div>
+
+                <div class="govuk-form-group{% if errors.employerAddress %} govuk-form-group--error{% endif %}">
+                  <label class="govuk-label" for="employerAddress">Employer address</label>
+                  {% if errors.employerAddress %}
+                    <p id="employerAddress-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> {{ errors.employerAddress }}</p>
+                  {% endif %}
+                  <input class="govuk-input{% if errors.employerAddress %} govuk-input--error{% endif %}" id="employerAddress" name="employerAddress" type="text" value="{{ formData.employerAddress }}">
+                </div>
+
+                <div class="govuk-form-group{% if errors.employerAgreed %} govuk-form-group--error{% endif %}">
+                  <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend">
+                      Has your employer agreed to release you for magistrate duties?
+                    </legend>
+                    {% if errors.employerAgreed %}
+                      <p id="employerAgreed-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> {{ errors.employerAgreed }}</p>
+                    {% endif %}
+                    <div class="govuk-radios govuk-radios--inline" data-module="govuk-radios">
+                      <div class="govuk-radios__item">
+                        <input class="govuk-radios__input" id="employerAgreed" name="employerAgreed" type="radio" value="yes"{% if formData.employerAgreed == "yes" %} checked{% endif %}>
+                        <label class="govuk-label govuk-radios__label" for="employerAgreed">Yes</label>
+                      </div>
+                      <div class="govuk-radios__item">
+                        <input class="govuk-radios__input" id="employerAgreed-2" name="employerAgreed" type="radio" value="no"{% if formData.employerAgreed == "no" %} checked{% endif %}>
+                        <label class="govuk-label govuk-radios__label" for="employerAgreed-2">No</label>
+                      </div>
+                    </div>
+                  </fieldset>
+                </div>
+              </div>
+
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="employmentStatus-2" name="employmentStatus" type="radio" value="Self-employed"{% if formData.employmentStatus == "Self-employed" %} checked{% endif %}>
+                <label class="govuk-label govuk-radios__label" for="employmentStatus-2">Self-employed</label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="employmentStatus-3" name="employmentStatus" type="radio" value="Retired"{% if formData.employmentStatus == "Retired" %} checked{% endif %}>
+                <label class="govuk-label govuk-radios__label" for="employmentStatus-3">Retired</label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="employmentStatus-4" name="employmentStatus" type="radio" value="Unemployed"{% if formData.employmentStatus == "Unemployed" %} checked{% endif %}>
+                <label class="govuk-label govuk-radios__label" for="employmentStatus-4">Unemployed</label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="employmentStatus-5" name="employmentStatus" type="radio" value="Student"{% if formData.employmentStatus == "Student" %} checked{% endif %}>
+                <label class="govuk-label govuk-radios__label" for="employmentStatus-5">Student</label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="employmentStatus-6" name="employmentStatus" type="radio" value="Other"{% if formData.employmentStatus == "Other" %} checked{% endif %}>
+                <label class="govuk-label govuk-radios__label" for="employmentStatus-6">Other</label>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <div class="govuk-form-group{% if errors.employmentHistory %} govuk-form-group--error{% endif %}">
+          <label class="govuk-label govuk-label--m" for="employmentHistory">Brief employment history</label>
+          <div id="employmentHistory-hint" class="govuk-hint">Please provide a summary of your employment history.</div>
+          {% if errors.employmentHistory %}
+            <p id="employmentHistory-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> {{ errors.employmentHistory }}</p>
+          {% endif %}
+          <textarea class="govuk-textarea{% if errors.employmentHistory %} govuk-textarea--error{% endif %}" id="employmentHistory" name="employmentHistory" rows="5" aria-describedby="employmentHistory-hint{% if errors.employmentHistory %} employmentHistory-error{% endif %}">{{ formData.employmentHistory }}</textarea>
+        </div>
+
+        <div class="govuk-button-group">
+          <button type="submit" class="govuk-button" data-module="govuk-button" name="action" value="save-and-continue">Save and continue</button>
+          <button type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button" name="action" value="save-and-return">Save and come back later</button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

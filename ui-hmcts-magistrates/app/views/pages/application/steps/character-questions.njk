@@ -1,0 +1,176 @@
+{% extends "layouts/main.njk" %}
+
+{% set currentPage = "my-applications" %}
+
+{% block beforeContent %}
+  <a href="/application/{{ applicationId }}" class="govuk-back-link">Back to task list</a>
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      {% if errors and errors | length > 0 %}
+        <div class="govuk-error-summary" data-module="govuk-error-summary">
+          <div role="alert">
+            <h2 class="govuk-error-summary__title">There is a problem</h2>
+            <div class="govuk-error-summary__body">
+              <ul class="govuk-list govuk-error-summary__list">
+                {% for key, message in errors %}
+                  <li><a href="#{{ key }}">{{ message }}</a></li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
+      <h1 class="govuk-heading-xl">Character questions</h1>
+
+      <p class="govuk-body">You must declare any matters that may affect your good character. Failure to disclose relevant information may result in your application being rejected.</p>
+
+      <form method="post" action="/application/{{ applicationId }}/character-questions" novalidate>
+
+        <div class="govuk-form-group{% if errors.criminalConviction %} govuk-form-group--error{% endif %}">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+              Have you ever been convicted of a criminal offence?
+            </legend>
+            {% if errors.criminalConviction %}
+              <p id="criminalConviction-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> {{ errors.criminalConviction }}</p>
+            {% endif %}
+            <div class="govuk-radios" data-module="govuk-radios">
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="criminalConviction" name="criminalConviction" type="radio" value="yes"{% if formData.criminalConviction == "yes" %} checked{% endif %} data-aria-controls="conditional-criminalConviction-yes">
+                <label class="govuk-label govuk-radios__label" for="criminalConviction">Yes</label>
+              </div>
+              <div class="govuk-radios__conditional{% if formData.criminalConviction != 'yes' %} govuk-radios__conditional--hidden{% endif %}" id="conditional-criminalConviction-yes">
+                <div class="govuk-form-group">
+                  <label class="govuk-label" for="criminalConvictionDetails">Provide details of the conviction(s)</label>
+                  <textarea class="govuk-textarea" id="criminalConvictionDetails" name="criminalConvictionDetails" rows="5">{{ formData.criminalConvictionDetails }}</textarea>
+                </div>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="criminalConviction-2" name="criminalConviction" type="radio" value="no"{% if formData.criminalConviction == "no" %} checked{% endif %}>
+                <label class="govuk-label govuk-radios__label" for="criminalConviction-2">No</label>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <div class="govuk-form-group{% if errors.cautionOrWarning %} govuk-form-group--error{% endif %}">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+              Have you received a caution, reprimand, or final warning?
+            </legend>
+            {% if errors.cautionOrWarning %}
+              <p id="cautionOrWarning-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> {{ errors.cautionOrWarning }}</p>
+            {% endif %}
+            <div class="govuk-radios" data-module="govuk-radios">
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="cautionOrWarning" name="cautionOrWarning" type="radio" value="yes"{% if formData.cautionOrWarning == "yes" %} checked{% endif %} data-aria-controls="conditional-cautionOrWarning-yes">
+                <label class="govuk-label govuk-radios__label" for="cautionOrWarning">Yes</label>
+              </div>
+              <div class="govuk-radios__conditional{% if formData.cautionOrWarning != 'yes' %} govuk-radios__conditional--hidden{% endif %}" id="conditional-cautionOrWarning-yes">
+                <div class="govuk-form-group">
+                  <label class="govuk-label" for="cautionOrWarningDetails">Provide details</label>
+                  <textarea class="govuk-textarea" id="cautionOrWarningDetails" name="cautionOrWarningDetails" rows="5">{{ formData.cautionOrWarningDetails }}</textarea>
+                </div>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="cautionOrWarning-2" name="cautionOrWarning" type="radio" value="no"{% if formData.cautionOrWarning == "no" %} checked{% endif %}>
+                <label class="govuk-label govuk-radios__label" for="cautionOrWarning-2">No</label>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <div class="govuk-form-group{% if errors.bankruptcyOrder %} govuk-form-group--error{% endif %}">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+              Are you currently subject to a bankruptcy restrictions order?
+            </legend>
+            {% if errors.bankruptcyOrder %}
+              <p id="bankruptcyOrder-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> {{ errors.bankruptcyOrder }}</p>
+            {% endif %}
+            <div class="govuk-radios" data-module="govuk-radios">
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="bankruptcyOrder" name="bankruptcyOrder" type="radio" value="yes"{% if formData.bankruptcyOrder == "yes" %} checked{% endif %} data-aria-controls="conditional-bankruptcyOrder-yes">
+                <label class="govuk-label govuk-radios__label" for="bankruptcyOrder">Yes</label>
+              </div>
+              <div class="govuk-radios__conditional{% if formData.bankruptcyOrder != 'yes' %} govuk-radios__conditional--hidden{% endif %}" id="conditional-bankruptcyOrder-yes">
+                <div class="govuk-form-group">
+                  <label class="govuk-label" for="bankruptcyOrderDetails">Provide details</label>
+                  <textarea class="govuk-textarea" id="bankruptcyOrderDetails" name="bankruptcyOrderDetails" rows="5">{{ formData.bankruptcyOrderDetails }}</textarea>
+                </div>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="bankruptcyOrder-2" name="bankruptcyOrder" type="radio" value="no"{% if formData.bankruptcyOrder == "no" %} checked{% endif %}>
+                <label class="govuk-label govuk-radios__label" for="bankruptcyOrder-2">No</label>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <div class="govuk-form-group{% if errors.directorDisqualified %} govuk-form-group--error{% endif %}">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+              Have you been disqualified as a company director?
+            </legend>
+            {% if errors.directorDisqualified %}
+              <p id="directorDisqualified-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> {{ errors.directorDisqualified }}</p>
+            {% endif %}
+            <div class="govuk-radios" data-module="govuk-radios">
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="directorDisqualified" name="directorDisqualified" type="radio" value="yes"{% if formData.directorDisqualified == "yes" %} checked{% endif %} data-aria-controls="conditional-directorDisqualified-yes">
+                <label class="govuk-label govuk-radios__label" for="directorDisqualified">Yes</label>
+              </div>
+              <div class="govuk-radios__conditional{% if formData.directorDisqualified != 'yes' %} govuk-radios__conditional--hidden{% endif %}" id="conditional-directorDisqualified-yes">
+                <div class="govuk-form-group">
+                  <label class="govuk-label" for="directorDisqualifiedDetails">Provide details</label>
+                  <textarea class="govuk-textarea" id="directorDisqualifiedDetails" name="directorDisqualifiedDetails" rows="5">{{ formData.directorDisqualifiedDetails }}</textarea>
+                </div>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="directorDisqualified-2" name="directorDisqualified" type="radio" value="no"{% if formData.directorDisqualified == "no" %} checked{% endif %}>
+                <label class="govuk-label govuk-radios__label" for="directorDisqualified-2">No</label>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <div class="govuk-form-group{% if errors.otherCharacterMatters %} govuk-form-group--error{% endif %}">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+              Are there any other matters that may affect your good character?
+            </legend>
+            {% if errors.otherCharacterMatters %}
+              <p id="otherCharacterMatters-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> {{ errors.otherCharacterMatters }}</p>
+            {% endif %}
+            <div class="govuk-radios" data-module="govuk-radios">
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="otherCharacterMatters" name="otherCharacterMatters" type="radio" value="yes"{% if formData.otherCharacterMatters == "yes" %} checked{% endif %} data-aria-controls="conditional-otherCharacterMatters-yes">
+                <label class="govuk-label govuk-radios__label" for="otherCharacterMatters">Yes</label>
+              </div>
+              <div class="govuk-radios__conditional{% if formData.otherCharacterMatters != 'yes' %} govuk-radios__conditional--hidden{% endif %}" id="conditional-otherCharacterMatters-yes">
+                <div class="govuk-form-group">
+                  <label class="govuk-label" for="otherCharacterMattersDetails">Provide details</label>
+                  <textarea class="govuk-textarea" id="otherCharacterMattersDetails" name="otherCharacterMattersDetails" rows="5">{{ formData.otherCharacterMattersDetails }}</textarea>
+                </div>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="otherCharacterMatters-2" name="otherCharacterMatters" type="radio" value="no"{% if formData.otherCharacterMatters == "no" %} checked{% endif %}>
+                <label class="govuk-label govuk-radios__label" for="otherCharacterMatters-2">No</label>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <div class="govuk-button-group">
+          <button type="submit" class="govuk-button" data-module="govuk-button" name="action" value="save-and-continue">Save and continue</button>
+          <button type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button" name="action" value="save-and-return">Save and come back later</button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

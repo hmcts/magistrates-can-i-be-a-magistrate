@@ -1,0 +1,184 @@
+{% extends "layouts/main.njk" %}
+
+{% set currentPage = "my-applications" %}
+
+{% block beforeContent %}
+  <a href="/application/{{ applicationId }}" class="govuk-back-link">Back to task list</a>
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      {% if errors and errors | length > 0 %}
+        <div class="govuk-error-summary" data-module="govuk-error-summary">
+          <div role="alert">
+            <h2 class="govuk-error-summary__title">There is a problem</h2>
+            <div class="govuk-error-summary__body">
+              <ul class="govuk-list govuk-error-summary__list">
+                {% for key, message in errors %}
+                  <li><a href="#{{ key }}">{{ message }}</a></li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
+      <h1 class="govuk-heading-xl">Eligibility questions</h1>
+
+      <form method="post" action="/application/{{ applicationId }}/eligibility-questions" novalidate>
+
+        <div class="govuk-form-group{% if errors.agedBetween18And74 %} govuk-form-group--error{% endif %}">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+              Are you aged between 18 and 74?
+            </legend>
+            {% if errors.agedBetween18And74 %}
+              <p id="agedBetween18And74-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> {{ errors.agedBetween18And74 }}</p>
+            {% endif %}
+            <div class="govuk-radios" data-module="govuk-radios">
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="agedBetween18And74" name="agedBetween18And74" type="radio" value="yes"{% if formData.agedBetween18And74 == "yes" %} checked{% endif %}>
+                <label class="govuk-label govuk-radios__label" for="agedBetween18And74">Yes</label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="agedBetween18And74-2" name="agedBetween18And74" type="radio" value="no"{% if formData.agedBetween18And74 == "no" %} checked{% endif %}>
+                <label class="govuk-label govuk-radios__label" for="agedBetween18And74-2">No</label>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <div class="govuk-form-group{% if errors.rightToRemain %} govuk-form-group--error{% endif %}">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+              Are you a British citizen, or do you have the right to remain in the UK?
+            </legend>
+            {% if errors.rightToRemain %}
+              <p id="rightToRemain-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> {{ errors.rightToRemain }}</p>
+            {% endif %}
+            <div class="govuk-radios" data-module="govuk-radios">
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="rightToRemain" name="rightToRemain" type="radio" value="yes"{% if formData.rightToRemain == "yes" %} checked{% endif %}>
+                <label class="govuk-label govuk-radios__label" for="rightToRemain">Yes</label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="rightToRemain-2" name="rightToRemain" type="radio" value="no"{% if formData.rightToRemain == "no" %} checked{% endif %}>
+                <label class="govuk-label govuk-radios__label" for="rightToRemain-2">No</label>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <div class="govuk-form-group{% if errors.canCommitDays %} govuk-form-group--error{% endif %}">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+              Can you commit to sitting a minimum of 13 days per year, plus training?
+            </legend>
+            {% if errors.canCommitDays %}
+              <p id="canCommitDays-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> {{ errors.canCommitDays }}</p>
+            {% endif %}
+            <div class="govuk-radios" data-module="govuk-radios">
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="canCommitDays" name="canCommitDays" type="radio" value="yes"{% if formData.canCommitDays == "yes" %} checked{% endif %}>
+                <label class="govuk-label govuk-radios__label" for="canCommitDays">Yes</label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="canCommitDays-2" name="canCommitDays" type="radio" value="no"{% if formData.canCommitDays == "no" %} checked{% endif %}>
+                <label class="govuk-label govuk-radios__label" for="canCommitDays-2">No</label>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <div class="govuk-form-group{% if errors.conflictsOfInterest %} govuk-form-group--error{% endif %}">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+              Do you have any conflicts of interest?
+            </legend>
+            <div id="conflictsOfInterest-hint" class="govuk-hint">For example, if you or a close family member works in the criminal justice system.</div>
+            {% if errors.conflictsOfInterest %}
+              <p id="conflictsOfInterest-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> {{ errors.conflictsOfInterest }}</p>
+            {% endif %}
+            <div class="govuk-radios" data-module="govuk-radios">
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="conflictsOfInterest" name="conflictsOfInterest" type="radio" value="yes"{% if formData.conflictsOfInterest == "yes" %} checked{% endif %} data-aria-controls="conditional-conflictsOfInterest-yes">
+                <label class="govuk-label govuk-radios__label" for="conflictsOfInterest">Yes</label>
+              </div>
+              <div class="govuk-radios__conditional{% if formData.conflictsOfInterest != 'yes' %} govuk-radios__conditional--hidden{% endif %}" id="conditional-conflictsOfInterest-yes">
+                <div class="govuk-form-group">
+                  <label class="govuk-label" for="conflictsOfInterestDetails">Provide details of your conflicts of interest</label>
+                  <textarea class="govuk-textarea" id="conflictsOfInterestDetails" name="conflictsOfInterestDetails" rows="5">{{ formData.conflictsOfInterestDetails }}</textarea>
+                </div>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="conflictsOfInterest-2" name="conflictsOfInterest" type="radio" value="no"{% if formData.conflictsOfInterest == "no" %} checked{% endif %}>
+                <label class="govuk-label govuk-radios__label" for="conflictsOfInterest-2">No</label>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <div class="govuk-form-group{% if errors.servingMagistrate %} govuk-form-group--error{% endif %}">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+              Are you, or have you been, a serving magistrate?
+            </legend>
+            {% if errors.servingMagistrate %}
+              <p id="servingMagistrate-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> {{ errors.servingMagistrate }}</p>
+            {% endif %}
+            <div class="govuk-radios" data-module="govuk-radios">
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="servingMagistrate" name="servingMagistrate" type="radio" value="yes"{% if formData.servingMagistrate == "yes" %} checked{% endif %} data-aria-controls="conditional-servingMagistrate-yes">
+                <label class="govuk-label govuk-radios__label" for="servingMagistrate">Yes</label>
+              </div>
+              <div class="govuk-radios__conditional{% if formData.servingMagistrate != 'yes' %} govuk-radios__conditional--hidden{% endif %}" id="conditional-servingMagistrate-yes">
+                <div class="govuk-form-group">
+                  <label class="govuk-label" for="servingMagistrateDetails">Provide details of your service as a magistrate</label>
+                  <textarea class="govuk-textarea" id="servingMagistrateDetails" name="servingMagistrateDetails" rows="5">{{ formData.servingMagistrateDetails }}</textarea>
+                </div>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="servingMagistrate-2" name="servingMagistrate" type="radio" value="no"{% if formData.servingMagistrate == "no" %} checked{% endif %}>
+                <label class="govuk-label govuk-radios__label" for="servingMagistrate-2">No</label>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <div class="govuk-form-group{% if errors.judicialOffice %} govuk-form-group--error{% endif %}">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+              Do you hold any judicial office?
+            </legend>
+            {% if errors.judicialOffice %}
+              <p id="judicialOffice-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> {{ errors.judicialOffice }}</p>
+            {% endif %}
+            <div class="govuk-radios" data-module="govuk-radios">
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="judicialOffice" name="judicialOffice" type="radio" value="yes"{% if formData.judicialOffice == "yes" %} checked{% endif %} data-aria-controls="conditional-judicialOffice-yes">
+                <label class="govuk-label govuk-radios__label" for="judicialOffice">Yes</label>
+              </div>
+              <div class="govuk-radios__conditional{% if formData.judicialOffice != 'yes' %} govuk-radios__conditional--hidden{% endif %}" id="conditional-judicialOffice-yes">
+                <div class="govuk-form-group">
+                  <label class="govuk-label" for="judicialOfficeDetails">Provide details of the judicial office you hold</label>
+                  <textarea class="govuk-textarea" id="judicialOfficeDetails" name="judicialOfficeDetails" rows="5">{{ formData.judicialOfficeDetails }}</textarea>
+                </div>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="judicialOffice-2" name="judicialOffice" type="radio" value="no"{% if formData.judicialOffice == "no" %} checked{% endif %}>
+                <label class="govuk-label govuk-radios__label" for="judicialOffice-2">No</label>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <div class="govuk-button-group">
+          <button type="submit" class="govuk-button" data-module="govuk-button" name="action" value="save-and-continue">Save and continue</button>
+          <button type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button" name="action" value="save-and-return">Save and come back later</button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}
