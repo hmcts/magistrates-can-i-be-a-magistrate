@@ -1,0 +1,17 @@
+{% extends "layouts/main.njk" %}
+
+{% block beforeContent %}
+  <nav class="govuk-!-padding-top-2" aria-label="Staff navigation">
+    <ul class="govuk-list" style="display:flex;gap:1.5rem;flex-wrap:wrap;margin-bottom:0.5rem;">
+      <li><a class="govuk-link" href="/staff/dashboard">Dashboard</a></li>
+      <li><a class="govuk-link" href="/staff/candidates">Candidates</a></li>
+      <li><a class="govuk-link" href="/staff/vacancies">Vacancies</a></li>
+      <li><a class="govuk-link" href="/staff/appeals">Appeals</a></li>
+      <li><a class="govuk-link" href="/staff/ryi">RYI</a></li>
+      <li><a class="govuk-link" href="/staff/reports">Reports</a></li>
+      {% if staffUser %}
+        <li style="margin-left:auto;">Signed in as <strong>{{ staffUser.firstName }} {{ staffUser.lastName }}</strong> ({{ staffUser.roleName }}) — <a class="govuk-link" href="/staff/sign-out">Sign out</a></li>
+      {% endif %}
+    </ul>
+  </nav>
+{% endblock %}

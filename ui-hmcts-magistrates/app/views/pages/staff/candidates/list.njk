@@ -1,0 +1,94 @@
+{% extends "layouts/staff.njk" %}
+
+{% block pageTitle %}Candidates — {{ serviceName }}{% endblock %}
+
+{% block content %}
+  <span class="govuk-caption-l">Staff portal</span>
+  <h1 class="govuk-heading-xl">Candidates</h1>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-quarter">
+      <form method="get" action="/staff/candidates">
+        <h2 class="govuk-heading-s">Filter</h2>
+
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="q">Search</label>
+          <input class="govuk-input" id="q" name="q" type="text" value="{{ filters.search or '' }}" placeholder="Name or reference">
+        </div>
+
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="folder">Folder</label>
+          <select class="govuk-select" id="folder" name="folder">
+            <option value="">All</option>
+            {% for f in folders %}
+              <option value="{{ f.key }}" {% if filters.folder == f.key %}selected{% endif %}>{{ f.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="region">Region</label>
+          <select class="govuk-select" id="region" name="region">
+            <option value="">All</option>
+            {% for r in regions %}
+              <option value="{{ r }}" {% if filters.region == r %}selected{% endif %}>{{ r }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="vacancyId">Vacancy</label>
+          <select class="govuk-select" id="vacancyId" name="vacancyId">
+            <option value="">All</option>
+            {% for v in vacancies %}
+              <option value="{{ v.id }}" {% if filters.vacancyId == v.id %}selected{% endif %}>{{ v.reference }} — {{ v.advisoryCommittee }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <button type="submit" class="govuk-button" data-module="govuk-button">Apply filters</button>
+        <p><a class="govuk-link" href="/staff/candidates">Clear filters</a></p>
+      </form>
+    </div>
+
+    <div class="govuk-grid-column-three-quarters">
+      <p class="govuk-body"><strong>{{ candidates.length }}</strong> candidate{% if candidates.length != 1 %}s{% endif %}</p>
+
+      {% if candidates.length == 0 %}
+        <p class="govuk-body">No candidates match your filters.</p>
+      {% else %}
+        <table class="govuk-table">
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">Reference</th>
+              <th class="govuk-table__header">Applicant</th>
+              <th class="govuk-table__header">Vacancy</th>
+              <th class="govuk-table__header">Region</th>
+              <th class="govuk-table__header">Folder</th>
+              <th class="govuk-table__header">Tags</th>
+              <th class="govuk-table__header"><span class="govuk-visually-hidden">Action</span></th>
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body">
+            {% for c in candidates %}
+              {% set folder = getFolder(c.currentFolder) %}
+              <tr class="govuk-table__row">
+                <td class="govuk-table__cell">{{ c.reference }}</td>
+                <td class="govuk-table__cell">{{ c.applicantName }}</td>
+                <td class="govuk-table__cell">{{ c.vacancyReference }}</td>
+                <td class="govuk-table__cell">{{ c.region }}</td>
+                <td class="govuk-table__cell">
+                  {% if folder %}<strong class="govuk-tag govuk-tag--{{ folder.tagColour }}">{{ folder.name }}</strong>{% else %}{{ c.currentFolder }}{% endif %}
+                </td>
+                <td class="govuk-table__cell">
+                  {% for t in c.tags %}<strong class="govuk-tag govuk-tag--yellow">{{ t }}</strong> {% endfor %}
+                </td>
+                <td class="govuk-table__cell"><a class="govuk-link" href="/staff/candidates/{{ c.id }}">View</a></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

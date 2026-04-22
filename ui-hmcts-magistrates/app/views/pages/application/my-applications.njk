@@ -34,26 +34,19 @@
                 <td class="govuk-table__cell">{{ app.reference }}</td>
                 <td class="govuk-table__cell">{{ app.vacancyTitle or "—" }}</td>
                 <td class="govuk-table__cell">
-                  {% if app.status == "draft" %}
-                    <strong class="govuk-tag govuk-tag--grey">Draft</strong>
-                  {% elif app.status == "submitted" %}
-                    <strong class="govuk-tag">Submitted</strong>
-                  {% elif app.status == "under_review" %}
-                    <strong class="govuk-tag govuk-tag--light-blue">Under review</strong>
-                  {% elif app.status == "accepted" %}
-                    <strong class="govuk-tag govuk-tag--green">Accepted</strong>
-                  {% elif app.status == "rejected" %}
-                    <strong class="govuk-tag govuk-tag--red">Rejected</strong>
+                  {% set folder = getFolder(app.currentFolder) %}
+                  {% if folder %}
+                    <strong class="govuk-tag govuk-tag--{{ folder.tagColour }}">{{ folder.name }}</strong>
                   {% else %}
                     <strong class="govuk-tag govuk-tag--grey">{{ app.status }}</strong>
                   {% endif %}
                 </td>
-                <td class="govuk-table__cell">{{ app.createdAt }}</td>
+                <td class="govuk-table__cell">{{ app.createdAt | date }}</td>
                 <td class="govuk-table__cell">
-                  {% if app.status == "draft" %}
+                  {% if app.currentFolder == 'draft' %}
                     <a class="govuk-link" href="/application/{{ app.id }}">Continue<span class="govuk-visually-hidden"> application {{ app.reference }}</span></a>
                   {% else %}
-                    <a class="govuk-link" href="/application/{{ app.id }}">View<span class="govuk-visually-hidden"> application {{ app.reference }}</span></a>
+                    <a class="govuk-link" href="/application/{{ app.id }}/status">View status<span class="govuk-visually-hidden"> of application {{ app.reference }}</span></a>
                   {% endif %}
                 </td>
               </tr>

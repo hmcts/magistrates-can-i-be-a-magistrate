@@ -1,0 +1,27 @@
+{% extends "layouts/staff.njk" %}
+
+{% block pageTitle %}Staff dashboard — {{ serviceName }}{% endblock %}
+
+{% block content %}
+  <span class="govuk-caption-l">Staff portal</span>
+  <h1 class="govuk-heading-xl">Dashboard</h1>
+
+  <p class="govuk-body">Total applications: <strong>{{ summary.total }}</strong></p>
+
+  <h2 class="govuk-heading-m govuk-!-margin-top-6">Candidates by folder</h2>
+
+  <div class="govuk-grid-row">
+    {% for tile in byFolderTiles %}
+      <div class="govuk-grid-column-one-quarter govuk-!-margin-bottom-4">
+        <div class="govuk-!-padding-3" style="border:1px solid #b1b4b6;min-height:120px;">
+          <p class="govuk-body-s govuk-!-margin-bottom-1" style="text-transform:uppercase;letter-spacing:0.5px;">Stage {{ tile.folder.stage }}</p>
+          <strong class="govuk-tag govuk-tag--{{ tile.folder.tagColour }}">{{ tile.folder.name }}</strong>
+          <p class="govuk-heading-l govuk-!-margin-top-2 govuk-!-margin-bottom-1">{{ tile.count }}</p>
+          {% if tile.count > 0 %}
+            <a class="govuk-link" href="/staff/candidates?folder={{ tile.folder.key }}">View</a>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "layouts/main.njk" %}
+
+{% block pageTitle %}Book your interview — {{ serviceName }}{% endblock %}
+
+{% block beforeContent %}
+  <a class="govuk-back-link" href="/application/{{ application.id }}/status">Back to application status</a>
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <span class="govuk-caption-l">Application {{ application.reference }}</span>
+      <h1 class="govuk-heading-xl">Book your interview</h1>
+
+      {% if slots.length == 0 %}
+        <p class="govuk-body">There are no interview slots available for this vacancy yet. We'll email you when they open.</p>
+      {% else %}
+        <form method="post" action="/application/{{ application.id }}/interview/book">
+          <div class="govuk-form-group">
+            <fieldset class="govuk-fieldset">
+              <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">Choose an interview slot</legend>
+              <div class="govuk-radios" data-module="govuk-radios">
+                {% for s in slots %}
+                  <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" id="slot-{{ loop.index }}" name="slotId" type="radio" value="{{ s.id }}">
+                    <label class="govuk-label govuk-radios__label" for="slot-{{ loop.index }}">
+                      {{ s.start | date }} — {{ s.panel | join(', ') }}
+                    </label>
+                  </div>
+                {% endfor %}
+              </div>
+            </fieldset>
+          </div>
+          <button type="submit" class="govuk-button" data-module="govuk-button">Book slot</button>
+        </form>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

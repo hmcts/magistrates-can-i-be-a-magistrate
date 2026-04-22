@@ -51,10 +51,13 @@ app.use((req, res, next) => {
 
 // Routes
 app.use('/', require('./app/routes/index'));
+app.use('/', require('./app/routes/ryi'));
 app.use('/vacancies', require('./app/routes/vacancies'));
 app.use('/auth', require('./app/routes/auth'));
 app.use('/application', require('./app/routes/application'));
 app.use('/admin', require('./app/routes/admin'));
+app.use('/staff', require('./app/routes/staff'));
+app.use('/guide', require('./app/routes/guide'));
 app.use('/health', require('./app/routes/health'));
 
 // 404

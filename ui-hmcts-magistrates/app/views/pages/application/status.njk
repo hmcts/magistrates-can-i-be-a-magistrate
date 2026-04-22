@@ -1,0 +1,57 @@
+{% extends "layouts/main.njk" %}
+
+{% block pageTitle %}Your application — {{ serviceName }}{% endblock %}
+
+{% block beforeContent %}
+  <a class="govuk-back-link" href="/application/my-applications">Back to my applications</a>
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <span class="govuk-caption-l">Application {{ application.reference }}</span>
+      <h1 class="govuk-heading-xl">Your application status</h1>
+
+      <p class="govuk-body">You applied for <strong>{{ application.vacancyTitle }}</strong> ({{ application.vacancyReference }}).</p>
+
+      {% if currentFolder %}
+        <p class="govuk-body">
+          Current stage:
+          <strong class="govuk-tag govuk-tag--{{ currentFolder.tagColour }}">{{ currentFolder.name }}</strong>
+        </p>
+        <p class="govuk-hint">{{ currentFolder.description }}</p>
+      {% endif %}
+
+      <h2 class="govuk-heading-m govuk-!-margin-top-6">What happens next</h2>
+
+      {% if application.currentFolder == 'sjt_passed' or application.currentFolder == 'references_request' %}
+        <p class="govuk-body">We need you to supply 2 referees.</p>
+        <a class="govuk-button" href="/application/{{ application.id }}/references" data-module="govuk-button">Submit references</a>
+      {% elif application.currentFolder == 'ready_for_interview' %}
+        <p class="govuk-body">Interview slots are available for you to book.</p>
+        <a class="govuk-button" href="/application/{{ application.id }}/interview/book" data-module="govuk-button">Book your interview</a>
+      {% elif application.currentFolder == 'offline_dbs' %}
+        <p class="govuk-body">We need you to upload your DBS certificate.</p>
+        <a class="govuk-button" href="/application/{{ application.id }}/dbs/upload" data-module="govuk-button">Upload DBS certificate</a>
+      {% elif application.currentFolder == 'rejected' or application.currentFolder == 'not_appointed' %}
+        <p class="govuk-body">If you believe there are grounds to appeal the decision, you can submit an appeal.</p>
+        <a class="govuk-button" href="/application/{{ application.id }}/appeal" data-module="govuk-button">Submit an appeal</a>
+      {% elif application.currentFolder == 'appointed' %}
+        <p class="govuk-body">Congratulations — you have been appointed as a magistrate. Your appointment letter will follow.</p>
+      {% else %}
+        <p class="govuk-body">There is nothing for you to do right now. We'll email you when we need something.</p>
+      {% endif %}
+
+      <h2 class="govuk-heading-m govuk-!-margin-top-6">Timeline</h2>
+      <ol class="govuk-list govuk-list--number">
+        {% for h in application.folderHistory %}
+          {% set f = getFolder(h.folder) %}
+          <li>
+            {% if f %}<strong class="govuk-tag govuk-tag--{{ f.tagColour }}">{{ f.name }}</strong>{% else %}{{ h.folder }}{% endif %}
+            — {{ h.enteredAt | date }}
+          </li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+{% endblock %}

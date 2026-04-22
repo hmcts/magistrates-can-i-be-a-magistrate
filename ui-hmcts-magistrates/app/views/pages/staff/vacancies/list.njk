@@ -1,0 +1,40 @@
+{% extends "layouts/staff.njk" %}
+
+{% block pageTitle %}Vacancies — {{ serviceName }}{% endblock %}
+
+{% block content %}
+  <span class="govuk-caption-l">Staff portal</span>
+  <h1 class="govuk-heading-xl">Vacancies</h1>
+
+  <p><a class="govuk-button" href="/staff/vacancies/new" data-module="govuk-button">Create vacancy</a></p>
+
+  <table class="govuk-table">
+    <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th class="govuk-table__header">Reference</th>
+        <th class="govuk-table__header">Title</th>
+        <th class="govuk-table__header">AC</th>
+        <th class="govuk-table__header">Region</th>
+        <th class="govuk-table__header">Closes</th>
+        <th class="govuk-table__header">Status</th>
+        <th class="govuk-table__header"><span class="govuk-visually-hidden">Action</span></th>
+      </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+      {% for v in vacancies %}
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">{{ v.reference }}</td>
+          <td class="govuk-table__cell">{{ v.title }}</td>
+          <td class="govuk-table__cell">{{ v.advisoryCommittee }}</td>
+          <td class="govuk-table__cell">{{ v.region }}</td>
+          <td class="govuk-table__cell">{{ v.closesAt | date }}</td>
+          <td class="govuk-table__cell">
+            {% if v.status == 'open' %}<strong class="govuk-tag govuk-tag--green">Open</strong>
+            {% else %}<strong class="govuk-tag govuk-tag--grey">{{ v.status }}</strong>{% endif %}
+          </td>
+          <td class="govuk-table__cell"><a class="govuk-link" href="/staff/vacancies/{{ v.id }}">Manage</a></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

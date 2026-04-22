@@ -1,0 +1,57 @@
+{% extends "layouts/main.njk" %}
+
+{% block pageTitle %}Test users — {{ serviceName }}{% endblock %}
+
+{% block beforeContent %}
+  <a class="govuk-back-link" href="/guide">Back to the guide</a>
+{% endblock %}
+
+{% block content %}
+  <h1 class="govuk-heading-xl">Test users</h1>
+
+  <p class="govuk-body">Click "Sign in as" to put the user straight into the session and jump to the relevant landing page.</p>
+
+  <h2 class="govuk-heading-m">Applicants</h2>
+  <table class="govuk-table">
+    <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th class="govuk-table__header">Name</th>
+        <th class="govuk-table__header">Email</th>
+        <th class="govuk-table__header">Demo stage</th>
+        <th class="govuk-table__header"><span class="govuk-visually-hidden">Sign in</span></th>
+      </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+      {% for a in applicants %}
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">{{ a.firstName }} {{ a.lastName }}</td>
+          <td class="govuk-table__cell">{{ a.email }}</td>
+          <td class="govuk-table__cell">{{ a.demoStage or '—' }}</td>
+          <td class="govuk-table__cell"><a class="govuk-link" href="/guide/as/{{ a.id }}?redirect=/application/my-applications">Sign in as</a></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h2 class="govuk-heading-m govuk-!-margin-top-6">Staff</h2>
+  <table class="govuk-table">
+    <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th class="govuk-table__header">Name</th>
+        <th class="govuk-table__header">Role</th>
+        <th class="govuk-table__header">Email</th>
+        <th class="govuk-table__header"><span class="govuk-visually-hidden">Sign in</span></th>
+      </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+      {% for s in staffUsers %}
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">{{ s.firstName }} {{ s.lastName }}</td>
+          <td class="govuk-table__cell">{{ s.roleName }}</td>
+          <td class="govuk-table__cell">{{ s.email }}</td>
+          <td class="govuk-table__cell"><a class="govuk-link" href="/guide/as/{{ s.id }}?redirect=/staff/dashboard">Sign in as</a></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

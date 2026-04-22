@@ -1,0 +1,85 @@
+{% extends "layouts/main.njk" %}
+
+{% block pageTitle %}Prototype explorer's guide — {{ serviceName }}{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <span class="govuk-caption-l">Prototype</span>
+      <h1 class="govuk-heading-xl">Explorer's guide</h1>
+
+      <p class="govuk-body-l">The magistrates recruitment process has 13 stages. This prototype shows both the applicant and staff views at wireframe depth. Use the quick links below to jump straight into any stage.</p>
+
+      <div class="govuk-inset-text">
+        <p class="govuk-body">Data is in-memory and resets on server restart.</p>
+        <p class="govuk-body"><a class="govuk-link" href="/guide/test-users">See all test users</a> — or <a class="govuk-link" href="/guide/seeded-data">browse the seeded candidates</a>.</p>
+      </div>
+
+      <h2 class="govuk-heading-l govuk-!-margin-top-6">The 13 stages</h2>
+
+      <ol class="govuk-list govuk-list--number">
+        {% for stage in stages %}
+          <li class="govuk-!-margin-bottom-6">
+            <h3 class="govuk-heading-m govuk-!-margin-bottom-2">{{ stage.name }}</h3>
+            <p class="govuk-body">{{ stage.summary }}</p>
+
+            <div class="govuk-grid-row">
+              {% if stage.demoApplicant %}
+                <div class="govuk-grid-column-one-half">
+                  <p class="govuk-body govuk-!-margin-bottom-1"><strong>Applicant view</strong></p>
+                  <a class="govuk-button govuk-button--secondary" data-module="govuk-button" href="{{ stage.demoApplicant.href }}">{{ stage.demoApplicant.label }}</a>
+                </div>
+              {% endif %}
+              {% if stage.demoStaff %}
+                <div class="govuk-grid-column-one-half">
+                  <p class="govuk-body govuk-!-margin-bottom-1"><strong>Staff view</strong></p>
+                  <a class="govuk-button govuk-button--secondary" data-module="govuk-button" href="{{ stage.demoStaff.href }}">{{ stage.demoStaff.label }}</a>
+                </div>
+              {% endif %}
+            </div>
+
+            {% if stage.candidates.length %}
+              <p class="govuk-body govuk-!-margin-top-2 govuk-!-margin-bottom-1"><strong>Seeded candidates at this stage</strong></p>
+              <ul class="govuk-list">
+                {% for c in stage.candidates %}
+                  {% set f = getFolder(c.currentFolder) %}
+                  <li>
+                    {{ c.applicantName }} — {{ c.reference }}
+                    {% if f %}<strong class="govuk-tag govuk-tag--{{ f.tagColour }}">{{ f.name }}</strong>{% endif %}
+                    <a class="govuk-link" href="/staff/candidates/{{ c.id }}">(staff view)</a>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ol>
+    </div>
+
+    <div class="govuk-grid-column-one-third">
+      <aside class="govuk-!-padding-top-4">
+        <h2 class="govuk-heading-s">Quick sign-in</h2>
+        <p class="govuk-body-s">Applicants:</p>
+        <ul class="govuk-list">
+          {% for a in applicants %}
+            <li><a class="govuk-link" href="/guide/as/{{ a.id }}?redirect=/application/my-applications">{{ a.firstName }} {{ a.lastName }}</a></li>
+          {% endfor %}
+        </ul>
+        <p class="govuk-body-s govuk-!-margin-top-4">Staff:</p>
+        <ul class="govuk-list">
+          {% for s in staffUsers %}
+            <li><a class="govuk-link" href="/guide/as/{{ s.id }}?redirect=/staff/dashboard">{{ s.firstName }} {{ s.lastName }} — {{ s.roleName }}</a></li>
+          {% endfor %}
+        </ul>
+
+        <h2 class="govuk-heading-s govuk-!-margin-top-6">Also see</h2>
+        <ul class="govuk-list">
+          <li><a class="govuk-link" href="/guide/test-users">Test users table</a></li>
+          <li><a class="govuk-link" href="/guide/seeded-data">Seeded candidates table</a></li>
+          <li><a class="govuk-link" href="/vacancies">Browse vacancies</a></li>
+          <li><a class="govuk-link" href="/staff/dashboard">Staff dashboard</a></li>
+        </ul>
+      </aside>
+    </div>
+  </div>
+{% endblock %}

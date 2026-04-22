@@ -1,0 +1,33 @@
+{% extends "layouts/main.njk" %}
+
+{% block pageTitle %}Submit an appeal — {{ serviceName }}{% endblock %}
+
+{% block beforeContent %}
+  <a class="govuk-back-link" href="/application/{{ application.id }}/status">Back to application status</a>
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">Submit an appeal</h1>
+
+      <p class="govuk-body">You can request a review of the decision by the Advisory Committee. If the AC review upholds the decision, you may request a further review by the Senior Presiding Judge.</p>
+
+      <form method="post" action="/application/{{ application.id }}/appeal">
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="grounds">Grounds for appeal</label>
+          <textarea class="govuk-textarea" id="grounds" name="grounds" rows="6" required></textarea>
+        </div>
+        <div class="govuk-form-group">
+          <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+            <div class="govuk-checkboxes__item">
+              <input class="govuk-checkboxes__input" id="requestSpjReview" name="requestSpjReview" type="checkbox" value="yes">
+              <label class="govuk-label govuk-checkboxes__label" for="requestSpjReview">Request SPJ review</label>
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="govuk-button" data-module="govuk-button">Submit appeal</button>
+      </form>
+    </div>
+  </div>
+{% endblock %}

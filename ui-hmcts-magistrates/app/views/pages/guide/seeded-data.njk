@@ -1,0 +1,49 @@
+{% extends "layouts/main.njk" %}
+
+{% block pageTitle %}Seeded candidates — {{ serviceName }}{% endblock %}
+
+{% block beforeContent %}
+  <a class="govuk-back-link" href="/guide">Back to the guide</a>
+{% endblock %}
+
+{% block content %}
+  <h1 class="govuk-heading-xl">Seeded candidates</h1>
+
+  <p class="govuk-body">{{ candidates.length }} applications spanning every folder of the pipeline.</p>
+
+  <table class="govuk-table">
+    <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th class="govuk-table__header">Reference</th>
+        <th class="govuk-table__header">Applicant</th>
+        <th class="govuk-table__header">Vacancy</th>
+        <th class="govuk-table__header">Region</th>
+        <th class="govuk-table__header">Folder</th>
+        <th class="govuk-table__header">Tags</th>
+        <th class="govuk-table__header"><span class="govuk-visually-hidden">Actions</span></th>
+      </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+      {% for c in candidates %}
+        {% set f = getFolder(c.currentFolder) %}
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">{{ c.reference }}</td>
+          <td class="govuk-table__cell">{{ c.applicantName }}</td>
+          <td class="govuk-table__cell">{{ c.vacancyReference }}</td>
+          <td class="govuk-table__cell">{{ c.region }}</td>
+          <td class="govuk-table__cell">
+            {% if f %}<strong class="govuk-tag govuk-tag--{{ f.tagColour }}">{{ f.name }}</strong>{% else %}{{ c.currentFolder }}{% endif %}
+          </td>
+          <td class="govuk-table__cell">
+            {% for t in c.tags %}<strong class="govuk-tag govuk-tag--yellow">{{ t }}</strong> {% endfor %}
+          </td>
+          <td class="govuk-table__cell">
+            <a class="govuk-link" href="/staff/candidates/{{ c.id }}">Staff view</a>
+            &nbsp;·&nbsp;
+            <a class="govuk-link" href="/guide/as/{{ c.applicantId }}?redirect=/application/{{ c.id }}/status">Sign in as applicant</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

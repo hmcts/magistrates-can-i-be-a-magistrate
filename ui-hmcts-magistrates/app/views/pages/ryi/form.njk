@@ -1,0 +1,52 @@
+{% extends "layouts/main.njk" %}
+
+{% block pageTitle %}Register your interest — {{ serviceName }}{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">Register your interest</h1>
+
+      <p class="govuk-body">If there are no current vacancies in your area, you can register your interest and we'll invite you to apply when one opens.</p>
+
+      {% if error %}
+        <div class="govuk-error-summary" data-module="govuk-error-summary">
+          <div role="alert"><h2 class="govuk-error-summary__title">There is a problem</h2>
+          <div class="govuk-error-summary__body"><p>{{ error }}</p></div></div>
+        </div>
+      {% endif %}
+
+      <form method="post" action="/register-your-interest">
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="firstName">First name</label>
+          <input class="govuk-input" id="firstName" name="firstName" type="text" value="{{ values.firstName or '' }}" required>
+        </div>
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="lastName">Last name</label>
+          <input class="govuk-input" id="lastName" name="lastName" type="text" value="{{ values.lastName or '' }}" required>
+        </div>
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="email">Email</label>
+          <input class="govuk-input" id="email" name="email" type="email" value="{{ values.email or '' }}" required>
+        </div>
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="region">Preferred region</label>
+          <select class="govuk-select" id="region" name="region">
+            {% for r in regions %}<option value="{{ r }}">{{ r }}</option>{% endfor %}
+          </select>
+        </div>
+        <div class="govuk-form-group">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend">Court type</legend>
+            <div class="govuk-radios" data-module="govuk-radios">
+              <div class="govuk-radios__item"><input class="govuk-radios__input" id="ct-criminal" name="courtType" type="radio" value="criminal" checked><label class="govuk-label govuk-radios__label" for="ct-criminal">Criminal</label></div>
+              <div class="govuk-radios__item"><input class="govuk-radios__input" id="ct-family" name="courtType" type="radio" value="family"><label class="govuk-label govuk-radios__label" for="ct-family">Family</label></div>
+            </div>
+          </fieldset>
+        </div>
+
+        <button type="submit" class="govuk-button" data-module="govuk-button">Register your interest</button>
+      </form>
+    </div>
+  </div>
+{% endblock %}
