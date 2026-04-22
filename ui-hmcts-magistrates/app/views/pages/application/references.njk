@@ -1,0 +1,30 @@
+{% extends "layouts/main.njk" %}
+
+{% block pageTitle %}Provide references — {{ serviceName }}{% endblock %}
+
+{% block beforeContent %}
+  <a class="govuk-back-link" href="/application/{{ application.id }}/status">Back to application status</a>
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <span class="govuk-caption-l">Application {{ application.reference }}</span>
+      <h1 class="govuk-heading-xl">Provide references</h1>
+
+      <p class="govuk-body">Please provide 2 referees. We'll contact them directly.</p>
+
+      <form method="post" action="/application/{{ application.id }}/references">
+        <h2 class="govuk-heading-m">Referee 1</h2>
+        <div class="govuk-form-group"><label class="govuk-label" for="referee1Name">Name</label><input class="govuk-input" id="referee1Name" name="referee1Name" type="text" required></div>
+        <div class="govuk-form-group"><label class="govuk-label" for="referee1Email">Email</label><input class="govuk-input" id="referee1Email" name="referee1Email" type="email" required></div>
+
+        <h2 class="govuk-heading-m">Referee 2</h2>
+        <div class="govuk-form-group"><label class="govuk-label" for="referee2Name">Name</label><input class="govuk-input" id="referee2Name" name="referee2Name" type="text" required></div>
+        <div class="govuk-form-group"><label class="govuk-label" for="referee2Email">Email</label><input class="govuk-input" id="referee2Email" name="referee2Email" type="email" required></div>
+
+        <button type="submit" class="govuk-button" data-module="govuk-button">Submit references</button>
+      </form>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "layouts/staff.njk" %}
+
+{% block pageTitle %}Create vacancy — {{ serviceName }}{% endblock %}
+
+{% block content %}
+  <a class="govuk-back-link" href="/staff/vacancies">Back to vacancies</a>
+  <h1 class="govuk-heading-xl">Create vacancy</h1>
+
+  <form method="post" action="/staff/vacancies/new">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="title">Title</label>
+          <input class="govuk-input" id="title" name="title" type="text" required>
+        </div>
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="advisoryCommittee">Advisory Committee</label>
+          <input class="govuk-input" id="advisoryCommittee" name="advisoryCommittee" type="text" required>
+        </div>
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="region">Region</label>
+          <select class="govuk-select" id="region" name="region" required>
+            {% for r in regions %}<option value="{{ r }}">{{ r }}</option>{% endfor %}
+          </select>
+        </div>
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="courtType">Court type</label>
+          <select class="govuk-select" id="courtType" name="courtType">
+            <option value="criminal">Criminal</option>
+            <option value="family">Family</option>
+          </select>
+        </div>
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="description">Description</label>
+          <textarea class="govuk-textarea" id="description" name="description" rows="4"></textarea>
+        </div>
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="opensAt">Opens</label>
+          <input class="govuk-input" id="opensAt" name="opensAt" type="date" required>
+        </div>
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="closesAt">Closes</label>
+          <input class="govuk-input" id="closesAt" name="closesAt" type="date" required>
+        </div>
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="positionsAvailable">Positions available</label>
+          <input class="govuk-input govuk-input--width-5" id="positionsAvailable" name="positionsAvailable" type="number" value="10">
+        </div>
+        <button type="submit" class="govuk-button" data-module="govuk-button">Create vacancy</button>
+      </div>
+    </div>
+  </form>
+{% endblock %}

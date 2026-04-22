@@ -1,0 +1,75 @@
+{% extends "layouts/staff.njk" %}
+
+{% block pageTitle %}{{ vacancy.reference }} — {{ serviceName }}{% endblock %}
+
+{% block content %}
+  <a class="govuk-back-link" href="/staff/vacancies">Back to vacancies</a>
+  <span class="govuk-caption-l">Vacancy</span>
+  <h1 class="govuk-heading-xl">{{ vacancy.title }}</h1>
+
+  <dl class="govuk-summary-list">
+    <div class="govuk-summary-list__row"><dt class="govuk-summary-list__key">Reference</dt><dd class="govuk-summary-list__value">{{ vacancy.reference }}</dd></div>
+    <div class="govuk-summary-list__row"><dt class="govuk-summary-list__key">Advisory Committee</dt><dd class="govuk-summary-list__value">{{ vacancy.advisoryCommittee }}</dd></div>
+    <div class="govuk-summary-list__row"><dt class="govuk-summary-list__key">Region</dt><dd class="govuk-summary-list__value">{{ vacancy.region }}</dd></div>
+    <div class="govuk-summary-list__row"><dt class="govuk-summary-list__key">Court type</dt><dd class="govuk-summary-list__value">{{ vacancy.courtType }}</dd></div>
+    <div class="govuk-summary-list__row"><dt class="govuk-summary-list__key">Opens</dt><dd class="govuk-summary-list__value">{{ vacancy.opensAt | date }}</dd></div>
+    <div class="govuk-summary-list__row"><dt class="govuk-summary-list__key">Closes</dt><dd class="govuk-summary-list__value">{{ vacancy.closesAt | date }}</dd></div>
+    <div class="govuk-summary-list__row"><dt class="govuk-summary-list__key">Status</dt><dd class="govuk-summary-list__value">{{ vacancy.status }}</dd></div>
+  </dl>
+
+  <form method="post" action="/staff/vacancies/{{ vacancy.id }}/update">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-half">
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="status">Status</label>
+          <select class="govuk-select" id="status" name="status">
+            <option value="open" {% if vacancy.status == 'open' %}selected{% endif %}>Open</option>
+            <option value="closed" {% if vacancy.status == 'closed' %}selected{% endif %}>Closed</option>
+            <option value="unposted" {% if vacancy.status == 'unposted' %}selected{% endif %}>Un-posted</option>
+          </select>
+        </div>
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="closesAt">Close date</label>
+          <input class="govuk-input" id="closesAt" name="closesAt" type="date" value="{{ vacancy.closesAt | truncate(10, true, '') }}">
+        </div>
+        <button type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button">Update</button>
+      </div>
+    </div>
+  </form>
+
+  <h2 class="govuk-heading-m govuk-!-margin-top-6">Interview slots</h2>
+  {% if slots.length %}
+    <table class="govuk-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header">Start</th>
+          <th class="govuk-table__header">End</th>
+          <th class="govuk-table__header">Panel</th>
+          <th class="govuk-table__header">Booked</th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        {% for s in slots %}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">{{ s.start | date }}</td>
+            <td class="govuk-table__cell">{{ s.end | date }}</td>
+            <td class="govuk-table__cell">{{ s.panel | join(', ') }}</td>
+            <td class="govuk-table__cell">{% if s.bookedByApplicationId %}Yes{% else %}No{% endif %}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p class="govuk-body">No interview slots yet.</p>
+  {% endif %}
+
+  <details class="govuk-details" data-module="govuk-details">
+    <summary class="govuk-details__summary"><span class="govuk-details__summary-text">Add interview slot</span></summary>
+    <form method="post" action="/staff/vacancies/{{ vacancy.id }}/slots" class="govuk-details__text">
+      <div class="govuk-form-group"><label class="govuk-label" for="start">Start</label><input class="govuk-input" id="start" name="start" type="datetime-local" required></div>
+      <div class="govuk-form-group"><label class="govuk-label" for="end">End</label><input class="govuk-input" id="end" name="end" type="datetime-local" required></div>
+      <div class="govuk-form-group"><label class="govuk-label" for="panel">Panel (comma separated names)</label><input class="govuk-input" id="panel" name="panel" type="text"></div>
+      <button type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button">Add slot</button>
+    </form>
+  </details>
+{% endblock %}

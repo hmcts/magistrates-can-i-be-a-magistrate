@@ -1,0 +1,49 @@
+{% extends "layouts/staff.njk" %}
+
+{% block pageTitle %}RYI registrants — {{ serviceName }}{% endblock %}
+
+{% block content %}
+  <span class="govuk-caption-l">Staff portal</span>
+  <h1 class="govuk-heading-xl">Register Your Interest</h1>
+
+  <p class="govuk-body">People who have registered interest in becoming a magistrate but have not yet applied.</p>
+
+  <table class="govuk-table">
+    <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th class="govuk-table__header">Name</th>
+        <th class="govuk-table__header">Email</th>
+        <th class="govuk-table__header">Region</th>
+        <th class="govuk-table__header">Court type</th>
+        <th class="govuk-table__header">Registered</th>
+        <th class="govuk-table__header">Invited</th>
+        <th class="govuk-table__header"><span class="govuk-visually-hidden">Action</span></th>
+      </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+      {% for r in registrants %}
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">{{ r.firstName }} {{ r.lastName }}</td>
+          <td class="govuk-table__cell">{{ r.email }}</td>
+          <td class="govuk-table__cell">{{ r.region }}</td>
+          <td class="govuk-table__cell">{{ r.courtType }}</td>
+          <td class="govuk-table__cell">{{ r.registeredAt | date }}</td>
+          <td class="govuk-table__cell">
+            {% if r.invitedToApplyAt %}
+              <strong class="govuk-tag govuk-tag--green">Invited {{ r.invitedToApplyAt | date }}</strong>
+            {% else %}
+              <strong class="govuk-tag govuk-tag--grey">Not yet</strong>
+            {% endif %}
+          </td>
+          <td class="govuk-table__cell">
+            {% if not r.invitedToApplyAt %}
+              <form method="post" action="/staff/ryi/{{ r.id }}/invite" style="display:inline;">
+                <button type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button" style="margin:0;">Invite</button>
+              </form>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

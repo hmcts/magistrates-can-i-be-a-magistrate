@@ -1,0 +1,18 @@
+{% extends "layouts/main.njk" %}
+
+{% block pageTitle %}Forbidden — {{ serviceName }}{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">You do not have access to this page</h1>
+      {% if staff %}
+        <p class="govuk-body">You are signed in as <strong>{{ staff.firstName }} {{ staff.lastName }}</strong> ({{ staff.roleName }}).</p>
+      {% endif %}
+      {% if allowedRoles and allowedRoles.length %}
+        <p class="govuk-body">This page is only available to: {{ allowedRoles | join(', ') }}.</p>
+      {% endif %}
+      <p class="govuk-body"><a class="govuk-link" href="/staff/dashboard">Go to the staff dashboard</a></p>
+    </div>
+  </div>
+{% endblock %}
