@@ -1,6 +1,12 @@
 # Can I Be a Magistrate
 
-Proof-of-concept replacement for the Affinix ATS magistrates recruitment system ([magistrates.affinixats.co.uk](https://magistrates.affinixats.co.uk)).
+Proof-of-concept replacement for the magistrates recruitment system ([magistrates.affinixats.co.uk](https://magistrates.affinixats.co.uk)).
+
+## Deployed Prototype
+
+Hosted prototype can be found [magistrates-can-i-be-a-magistrate](https://magistrates-can-i-be-a-magistrate.onrender.com/)
+
+**Note** this is hosted on a free tier, so there may be a short delay on initial startup.
 
 ## Quick Start
 
