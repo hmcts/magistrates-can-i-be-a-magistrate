@@ -16,11 +16,17 @@ app.use(express.json());
 
 // Sessions (in-memory)
 app.use(session({
-  secret: 'magistrates-prototype-secret',
+  secret: process.env.SESSION_SECRET || 'magistrates-prototype-secret',
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: false, maxAge: 1800000 },
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: 1800000,
+  },
 }));
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1); // Render terminates TLS at a proxy
+}
 
 // Static assets
 app.use('/assets', express.static(path.join(__dirname, 'node_modules/govuk-frontend/dist/govuk/assets')));
